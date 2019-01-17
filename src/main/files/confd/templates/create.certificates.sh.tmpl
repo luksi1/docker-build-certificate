@@ -1,0 +1,12 @@
+#!/bin/sh
+
+openssl req -x509 -newkey rsa:4096 -nodes -days 1 -keyout /export/ca.key -out /export/ca.crt -subj "{{ getenv "ROOT_SUBJECT" }}"
+openssl genrsa -out /export/private.key 4096
+openssl req -new -key /export/private.key -out ia.csr -subj "{{getenv "INTERMEDIATE_SUBJECT" }}"
+touch certindex
+echo 01 > certserial
+echo 01 > crlnumber
+openssl ca -batch -config ca.conf -notext -in ia.csr -out /export/public.crt
+openssl pkcs12 -export -out /export/certificate.p12 -inkey /export/private.key -in /export/public.crt -chain -CAfile /export/ca.crt -passin pass:{{ getenv "PKCS12_PASSWORD" }} -passout pass:{{ getenv "PKCS12_PASSWORD" }}
+openssl ca -config ca.conf -gencrl -keyfile /export/ca.key -cert /export/ca.crt -out root.crl.pem
+openssl crl -inform PEM -in root.crl.pem -outform DER -out /export/root.crl

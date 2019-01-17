@@ -1,0 +1,37 @@
+[ ca ]
+default_ca = myca
+
+[ crl_ext ]
+authorityKeyIdentifier=keyid
+
+[ myca ]
+dir = ./
+new_certs_dir = $dir
+unique_subject = no
+certificate = /export/ca.crt
+database = $dir/certindex
+private_key = /export/ca.key
+serial = $dir/certserial
+default_days = 730
+default_md = sha1
+policy = myca_policy
+x509_extensions = myca_extensions
+crlnumber = $dir/crlnumber
+default_crl_days = 730
+
+[ myca_policy ]
+commonName = optional
+stateOrProvinceName = optional
+countryName = optional
+emailAddress = optional
+organizationName = optional
+organizationalUnitName = optional
+
+[ myca_extensions ]
+basicConstraints = CA:false
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid
+keyUsage = digitalSignature,keyEncipherment
+extendedKeyUsage = serverAuth
+crlDistributionPoints = URI:{{ getenv "CRL_DISTRIBUTION_POINTS" }}/root.crl
+
