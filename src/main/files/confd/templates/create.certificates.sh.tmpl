@@ -45,6 +45,23 @@ cat ca/certs/ca.crt \
       intermediate/certs/intermediate.crt > intermediate/certs/ca-chain.crt
 chmod 444 intermediate/certs/ca-chain.crt
 
+# Create a server certificate key and certificate signing request
+openssl req -nodes -newkey rsa:2048 -keyout intermediate/private/{{ getenv "SERVER_NAME" }}.key -out intermediate/csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
+chmod 400 intermediate/private/{{ getenv "SERVER_NAME" }}.key
+
+# Sign the certificate
+openssl ca -batch -config config/intermediate.cnf \
+  -extensions server_cert -days {{ getenv "SERVER_DAYS" }} -notext -md sha256 \
+  -in intermediate/csr/{{ getenv "SERVER_NAME" }}.csr \
+  -out intermediate/certs/{{ getenv "SERVER_NAME" }}.crt \
+  -passin pass:{{ getenv "INTERMEDIATE_PASSWORD" }}
+chmod 444 intermediate/certs/{{ getenv "SERVER_NAME" }}.crt
+
+# Create certificate revocation list
+openssl ca -batch -config config/intermediate.cnf \
+  -gencrl -out intermediate/crl/intermediate.crl \
+  -passin pass:{{ getenv "INTERMEDIATE_PASSWORD" }}
+
 cp -ar intermediate /export/
 cp -ar ca /export/
 rm -f /export/ca/index.txt.attr /export/ca/*.old

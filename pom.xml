@@ -7,12 +7,14 @@
   <packaging>pom</packaging>
   <properties>
     <root.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=root.test</root.subject>
-    <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test</intermediate.subject>
+    <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=intermediate.test</intermediate.subject>
+    <server.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test</server.subject>
     <root.days>1</root.days>
     <intermediate.days>1</intermediate.days>
     <password>abcd1234</password>
     <default.crl.days>1</default.crl.days>
     <default.days>1</default.days>
+    <crl.distribution.points>http://luksi1.test/intermediate.crl</crl.distribution.points>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- Version of theFabric8 Docker Maven plugin. -->
     <docker-maven-plugin.version>0.21.0</docker-maven-plugin.version>
@@ -60,10 +62,15 @@
                 <env>
                   <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
                   <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
+                  <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
                   <ROOT_PASSWORD>${password}</ROOT_PASSWORD>
                   <INTERMEDIATE_PASSWORD>${password}</INTERMEDIATE_PASSWORD>
+                  <SERVER_PASSWORD>${password}</SERVER_PASSWORD>
                   <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
                   <DEFAULT_DAYS>1</DEFAULT_DAYS>
+                  <SERVER_DAYS>1</SERVER_DAYS>
+                  <CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>
+                  <SERVER_NAME>luksi1.test</SERVER_NAME>
                 </env>
               </run>
             </image>

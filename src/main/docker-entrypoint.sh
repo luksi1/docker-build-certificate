@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/sh 
+
+set -x
 
 /usr/local/bin/confd -onetime -backend env
-cat /usr/local/bin/create.certificates.sh
 /usr/local/bin/create.certificates.sh
