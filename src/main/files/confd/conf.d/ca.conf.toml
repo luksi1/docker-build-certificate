@@ -1,3 +1,0 @@
-[template]
-src = "ca.conf.tmpl"
-dest = "/workspace/ca.conf"

@@ -8,14 +8,17 @@
   <properties>
     <root.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=root.test</root.subject>
     <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test</intermediate.subject>
-    <crl.distribution_points>http://example.com/root.crl</crl.distribution_points>
+    <root.days>1</root.days>
+    <intermediate.days>1</intermediate.days>
+    <password>abcd1234</password>
+    <default.crl.days>1</default.crl.days>
+    <default.days>1</default.days>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- Version of theFabric8 Docker Maven plugin. -->
     <docker-maven-plugin.version>0.21.0</docker-maven-plugin.version>
     <!--Log output during creation of Docker image to standard out. -->
     <docker.verbose>true</docker.verbose>
     <docker.autoCreateCustomNetworks>true</docker.autoCreateCustomNetworks>
-    <docker.registry>docker.io</docker.registry>
   </properties>
   <dependencies>
     <dependency>
@@ -38,12 +41,15 @@
         <artifactId>docker-maven-plugin</artifactId>
         <version>${docker-maven-plugin.version}</version>
         <configuration>
-          <registry>${docker.registry}</registry>
           <images>
             <image>
-              <name>docker.io/luksi1/certificate-builder:latest</name>
+              <name>luksi1/%a:latest</name>
               <build>
                 <dockerFileDir>${project.basedir}/src/main</dockerFileDir>
+                <tags>
+                  <tag>${project.version}</tag>
+                  <tag>latest</tag>
+                </tags>
               </build>
               <run>
                 <volumes>
@@ -54,8 +60,10 @@
                 <env>
                   <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
                   <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
-                  <CRL_DISTRIBUTION_POINTS>example.com</CRL_DISTRIBUTION_POINTS>
-                  <PKCS12_PASSWORD>Abcd1234</PKCS12_PASSWORD>
+                  <ROOT_PASSWORD>${password}</ROOT_PASSWORD>
+                  <INTERMEDIATE_PASSWORD>${password}</INTERMEDIATE_PASSWORD>
+                  <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
+                  <DEFAULT_DAYS>1</DEFAULT_DAYS>
                 </env>
               </run>
             </image>
