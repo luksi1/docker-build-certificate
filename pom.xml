@@ -63,14 +63,16 @@
                   <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
                   <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
                   <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
-                  <ROOT_PASSWORD>${password}</ROOT_PASSWORD>
-                  <INTERMEDIATE_PASSWORD>${password}</INTERMEDIATE_PASSWORD>
-                  <SERVER_PASSWORD>${password}</SERVER_PASSWORD>
+                  <ROOT_KEY_PASSWORD>${password}</ROOT_KEY_PASSWORD>
+                  <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
+                  <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
                   <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
                   <DEFAULT_DAYS>1</DEFAULT_DAYS>
-                  <SERVER_DAYS>1</SERVER_DAYS>
                   <CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>
                   <SERVER_NAME>luksi1.test</SERVER_NAME>
+                  <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
+                  <INTERMEDIATE_CERT_EXPIRATION_DAYS>1</INTERMEDIATE_CERT_EXPIRATION_DAYS>
+                  <ROOT_CERT_EXPIRATION_DAYS>1</ROOT_CERT_EXPIRATION_DAYS>
                 </env>
               </run>
             </image>

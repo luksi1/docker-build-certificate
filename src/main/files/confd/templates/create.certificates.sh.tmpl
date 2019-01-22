@@ -5,14 +5,14 @@ chmod 700 ca/private
 touch ca/index.txt
 echo 1000 > ca/serial
 
-openssl genrsa -aes256 -out ca/private/ca.key -passout pass:{{ getenv "ROOT_PASSWORD" }} 4096
+openssl genrsa -aes256 -out ca/private/ca.key -passout pass:{{ getenv "ROOT_KEY_PASSWORD" }} 4096
 chmod 400 ca/private/ca.key
 openssl req -config config/root.cnf \
   -key ca/private/ca.key \
-  -new -x509 -days {{ getenv "ROOT_DAYS" }} -sha256 -extensions v3_ca \
+  -new -x509 -days {{ getenv "ROOT_CERT_EXPIRATION_DAYS" }} -sha256 -extensions v3_ca \
   -out ca/certs/ca.crt \
   -subj "{{ getenv "ROOT_SUBJECT" }}" \
-  -passin pass:{{ getenv "ROOT_PASSWORD" }}
+  -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}
 
 mkdir -p intermediate/certs intermediate/crl intermediate/csr intermediate/newcerts intermediate/private
 chmod 700 intermediate/private
@@ -21,7 +21,7 @@ echo 1000 > intermediate/serial
 echo 1000 > intermediate/crlnumber
 
 openssl genrsa -aes256 \
-  -out intermediate/private/intermediate.key -passout pass:{{ getenv "INTERMEDIATE_PASSWORD" }} 4096
+  -out intermediate/private/intermediate.key -passout pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }} 4096
 
 chmod 400 intermediate/private/intermediate.key
 
@@ -29,14 +29,14 @@ openssl req -config config/intermediate.cnf -new -sha256 \
   -key intermediate/private/intermediate.key \
   -out intermediate/csr/intermediate.csr \
   -subj "{{ getenv "INTERMEDIATE_SUBJECT" }}" \
-  -passin pass:{{ getenv "INTERMEDIATE_PASSWORD" }}
+  -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
 
 # Sign the CSR
 openssl ca -batch -config config/root.cnf -extensions v3_intermediate_ca \
-  -days {{ getenv "INTERMEDIATE_DAYS" }} -notext -md sha256 \
+  -days {{ getenv "INTERMEDIATE_CERT_EXPIRATION_DAYS" }} -notext -md sha256 \
   -in intermediate/csr/intermediate.csr \
   -out intermediate/certs/intermediate.crt \
-  -passin pass:{{ getenv "ROOT_PASSWORD" }}
+  -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}
 
 chmod 444 intermediate/certs/intermediate.crt
 
@@ -51,16 +51,16 @@ chmod 400 intermediate/private/{{ getenv "SERVER_NAME" }}.key
 
 # Sign the certificate
 openssl ca -batch -config config/intermediate.cnf \
-  -extensions server_cert -days {{ getenv "SERVER_DAYS" }} -notext -md sha256 \
+  -extensions server_cert -days {{ getenv "SERVER_CERT_EXPIRATION_DAYS" }} -notext -md sha256 \
   -in intermediate/csr/{{ getenv "SERVER_NAME" }}.csr \
   -out intermediate/certs/{{ getenv "SERVER_NAME" }}.crt \
-  -passin pass:{{ getenv "INTERMEDIATE_PASSWORD" }}
+  -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
 chmod 444 intermediate/certs/{{ getenv "SERVER_NAME" }}.crt
 
 # Create certificate revocation list
 openssl ca -batch -config config/intermediate.cnf \
   -gencrl -out intermediate/crl/intermediate.crl \
-  -passin pass:{{ getenv "INTERMEDIATE_PASSWORD" }}
+  -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
 
 cp -ar intermediate /export/
 cp -ar ca /export/
