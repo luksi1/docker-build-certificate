@@ -129,6 +129,14 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
         <version>2.12</version>
+        <configuration>
+          <systemPropertyVariables>
+            <certificate_directory>${project.basedir}/volumes/certificates</certificate_directory>
+            <root_subject>${root.subject}</root_subject>
+            <intermediate_subject>${intermediate.subject}</intermediate_subject>
+            <server_subject>${server.subject}</server_subject>
+          </systemPropertyVariables>
+        </configuration>
         <executions>
           <execution>
             <id>integration-test</id>
