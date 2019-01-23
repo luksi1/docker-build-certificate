@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/luksi1/docker-certificate-builder.svg?branch=master)](https://travis-ci.org/luksi1/docker-certificate-builder)
+[![Build Status](https://travis-ci.org/luksi1/docker-build-certificate.svg?branch=master)](https://travis-ci.org/luksi1/docker-build-certificate)
 
 # Server certificate builder
 
