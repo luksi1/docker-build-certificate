@@ -14,6 +14,7 @@ env:
 before_install:
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
 jobs:
   include:
@@ -26,10 +27,6 @@ jobs:
     - stage: "Integration Tests"
       name: "docker-maven-plugin integration tests"
       script: mvn verify
-
-after_success:
-  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
-      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
-      mvn docker:push
-    fi
-
+    - stage: "Deploy"
+      name: "Deploy to DockerHub"
+      script: mvn docker:push
