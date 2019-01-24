@@ -13,10 +13,11 @@ before_install:
 jobs:
   include:
     - stage: "Syntax"
-      name: "Syntax checking"
+      name: "Dockerfile checks with Hadolint"
       script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/Dockerfile
     -
+      name: "Shell checks with shellchecker"
       script: docker run -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/*sh
-    - stage: "IntegrationTests"
-      name: "Integration tests"
+    - stage: "Integration Tests"
+      name: "docker-maven-plugin integration tests"
       script: mvn verify
