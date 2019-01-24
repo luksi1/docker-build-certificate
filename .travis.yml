@@ -6,6 +6,11 @@ sudo: required
 services:
   - docker
 
+env:
+  -global:
+    - secure: fT5yWlboowhnTGfmTRtWuKwqFo89rjTZROjXuadfcyNxG4UykZg/TOnVd+9yfuhGDPpe/jUIOAmFpWJ990AkhEysaSAX8D8VaTCXnRODTKUHhaht7JBom7Sqc8lKRe5ZQuO+GI13eHjdfTHFEH0fLQauJkHrqGhzc2+zV+7xS1PjVutthdkyIo1FI+PYppUtyIKH2jZNUD8UrJiQbMOZpTyCSaM7Ele7FpJob4aGUTARwrmVV8ufgMRfhpkjIzbRszXb/cxKTz+jnhNP3sys65P3ZMqNvK36TNCNR/FsiREmJcha/UHy2HKNXm48tp/PZ0PTKLCnRvX+9iUkn5Ti654qrlkQ+ikeak1T4xm7zVHoiJb6qItQe/4C9/sn8WBd8bMyd/yoxcdz3Mx7lzWPJQHRwMPcnxR/2vK669ipYXXmWwiPeSQfGs4b4bhyz3Xl6qvjapf18KValTEnwt+lBuyi3ye1XZM7BgBngYx6ZDd9a8IhEqkorebs+wO+iIkmfPjlIwuObD4VGJCmPFwUeJU34tjcUktlWiC/o2sujPJbDS/HNP4PT/CP1BbmmFlNJywG0sCru4mj4uomk4SFw/E/qX/XQ3sm1wmJBltaHvZAdxYs2RLqmd0a2CDMKCAqhLFPL/VAPKJ3tueZBdzZd4kVaERLxY1voHj6gUkrZlg=
+    - secure: r1AuT6xQH5VG4RZ7/qEulsg2/l6DB5Xm1l8pDmbaSsyZxk7oicYWRZjpvMVEu6sOzmh6/GjvrZBbvD3iULFy43khsBTS6n/Q0tLjAwtqk3GJmyupVaPQvIZGaq0KKe/TrJsH6L+wESL0pCZsou2f2PAoD/Amtq9Gfle7iID/rRIgR+wzY/JXC+LOiAS5fRJjbZXYFam5Fcv4ebT+rrKFJImfIEPnjBeQ5lPxR7xpLuyUwoAucOm504WgCKxOJB9HfAAL2wYXm4GDyyCroHYesyys+aWbmZuP3bUpfrb7lsG7itJQRJ4nP8A6UyQeZN1FUqqp5cYA9ZnbbEJt211wIZz+MKT5Xf0DMNotsT0odnhKeclH56ooB5ZPcfmrzPsGs/qV5eC+AC/i4Zh8LWB1Xs0W/lGnZy9HOq/KY3bb+YHU6YZqralv9kPpvKmeX6KVjbBIEPQGv4fIuFgSFf4D+SYXAYpJumFsSJFyr1LHFfEituHUj+uK8Odavoh1+ABHyFNYesTP3TnbRV228btHw9wbaCjBscuHA/LKLdQ38b+2L4Q1fV2Ahzfj7sEWQecZa088jnXYc/1sUP93NchXRfftxfRyPh2MsL6jhbGtJf5oPLbm20rsVPlLMJ2ldYlyMVrbgejh0aQhVBogL1PTC6aPoSV/8rMkHil7mg1+90M=
+
 before_install:
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
@@ -21,3 +26,10 @@ jobs:
     - stage: "Integration Tests"
       name: "docker-maven-plugin integration tests"
       script: mvn verify
+
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+      mvn docker:push
+    fi
+
