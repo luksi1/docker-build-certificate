@@ -1,0 +1,19 @@
+#!/bin/sh
+
+mkdir -p /certs /crl /newcerts /private 
+chmod 700 /private
+touch /index.txt
+echo 1000 > /serial
+
+openssl genrsa -aes256 -out /private/root.key -passout pass:{{ getenv "ROOT_KEY_PASSWORD" }} 4096
+chmod 400 /private/root.key
+openssl req -config /config/root.cnf \
+  -key /private/root.key \
+  -new -x509 -days {{ getenv "ROOT_CERT_EXPIRATION_DAYS" }} -sha256 -extensions v3_ca \
+  -out /certs/root.crt \
+  -subj "{{ getenv "ROOT_SUBJECT" }}" \
+  -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}
+
+mkdir -p /export/private /export/certs
+cp /private/root.key /export/private/
+cp /certs/root.crt /export/certs/
