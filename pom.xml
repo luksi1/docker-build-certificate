@@ -9,12 +9,8 @@
     <root.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=root.test</root.subject>
     <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=intermediate.test</intermediate.subject>
     <server.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test</server.subject>
-    <root.days>1</root.days>
-    <intermediate.days>1</intermediate.days>
+    <days>1</days>
     <password>abcd1234</password>
-    <default.crl.days>1</default.crl.days>
-    <default.days>1</default.days>
-    <crl.distribution.points>http://luksi1.test/intermediate.crl</crl.distribution.points>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <!-- Version of theFabric8 Docker Maven plugin. -->
     <docker-maven-plugin.version>0.21.0</docker-maven-plugin.version>
@@ -45,9 +41,9 @@
         <configuration>
           <images>
             <image>
-              <name>luksi1/%a:latest</name>
+              <name>luksi1/root-%a:latest</name>
               <build>
-                <dockerFileDir>${project.basedir}/src/main</dockerFileDir>
+                <dockerFileDir>${project.basedir}/src/main/root-certificate</dockerFileDir>
                 <tags>
                   <tag>${project.version}</tag>
                   <tag>latest</tag>
@@ -61,18 +57,62 @@
                 </volumes>
                 <env>
                   <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
-                  <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
-                  <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
                   <ROOT_KEY_PASSWORD>${password}</ROOT_KEY_PASSWORD>
+                  <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
+                  <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
+                  <DEFAULT_DAYS>1</DEFAULT_DAYS>
+                  <!--<CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>-->
+                  <ROOT_CERT_EXPIRATION_DAYS>1</ROOT_CERT_EXPIRATION_DAYS>
+                </env>
+              </run>
+            </image>
+            <image>
+              <name>luksi1/intermediate-%a:latest</name>
+              <build>
+                <dockerFileDir>${project.basedir}/src/main/intermediate-certificate</dockerFileDir>
+                <tags>
+                  <tag>${project.version}</tag>
+                  <tag>latest</tag>
+                </tags>
+              </build>
+              <run>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
                   <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
+                  <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
+                  <DEFAULT_DAYS>1</DEFAULT_DAYS>
+                  <INTERMEDIATE_CERT_EXPIRATION_DAYS>1</INTERMEDIATE_CERT_EXPIRATION_DAYS>
+                </env>
+              </run>
+            </image>
+            <image>
+              <name>luksi1/server-%a:latest</name>
+              <build>
+                <dockerFileDir>${project.basedir}/src/main/server-certificate</dockerFileDir>
+                <tags>
+                  <tag>${project.version}</tag>
+                  <tag>latest</tag>
+                </tags>
+              </build>
+              <run>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
                   <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
                   <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
                   <DEFAULT_DAYS>1</DEFAULT_DAYS>
                   <CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>
                   <SERVER_NAME>luksi1.test</SERVER_NAME>
                   <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
-                  <INTERMEDIATE_CERT_EXPIRATION_DAYS>1</INTERMEDIATE_CERT_EXPIRATION_DAYS>
-                  <ROOT_CERT_EXPIRATION_DAYS>1</ROOT_CERT_EXPIRATION_DAYS>
                 </env>
               </run>
             </image>
