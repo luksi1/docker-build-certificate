@@ -6,20 +6,18 @@ authorityKeyIdentifier=keyid
 
 [ CA_default ]
 # directories
-dir = ./intermediate
-certs = $dir/certs
-crl_dir = $dir/crl
-new_certs_dir = $dir/newcerts
-database = $dir/index.txt
-serial = $dir/serial
+certs = /certs
+crl_dir = /crl
+new_certs_dir = /newcerts
+database = /index.txt
+serial = /serial
 
-# root key and certificate
-private_key = $dir/private/intermediate.key
-certificate = $dir/certs/intermediate.crt
+private_key = /private/intermediate.key
+certificate = /certs/intermediate.crt
 
 # CRL
-crlnumber = $dir/crlnumber
-crl = $dir/crl/ca.crl
+crlnumber = /crlnumber
+crl = /crl/ca.crl
 crl_extentions = crl_ext
 default_crl_days = {{ getenv "DEFAULT_CRL_DAYS" }}
 

@@ -11,7 +11,7 @@ class VerifyCertificatesIT extends GroovyTestCase {
 
   void testRootCertificate() {
     def dir = System.getProperty("certificate_directory")
-    def command = "openssl x509 -noout -text -in " + dir + "/ca/certs/ca.crt"
+    def command = "openssl x509 -noout -text -in " + dir + "/certs/root.crt"
     def proc = command.execute()
     proc.waitFor()
     assertEquals(proc.exitValue(), 0)
@@ -20,7 +20,7 @@ class VerifyCertificatesIT extends GroovyTestCase {
 
   void testIntermediateCertificate() {
     def dir = System.getProperty("certificate_directory")
-    def command = "openssl x509 -noout -text -in " + dir + "/intermediate/certs/intermediate.crt"
+    def command = "openssl x509 -noout -text -in " + dir + "/certs/intermediate.crt"
     def proc = command.execute()
     proc.waitFor()
     assertEquals(proc.exitValue(), 0)
@@ -29,21 +29,21 @@ class VerifyCertificatesIT extends GroovyTestCase {
 
   void testServerCertificate() {
     def dir = System.getProperty("certificate_directory")
-    def command = "openssl x509 -noout -text -in " + dir + "/intermediate/certs/luksi1.test.crt"
+    def command = "openssl x509 -noout -text -in " + dir + "/certs/luksi1.test.crt"
     def proc = command.execute()
     proc.waitFor()
     assertEquals(proc.exitValue(), 0)
     assertThat(proc.in.text, containsString("CN=luksi1.test"))
   }
 
-  void testCertificateRevocationList() {
-    def dir = System.getProperty("certificate_directory")
-    def command = "openssl crl -noout -text -in " + dir + "/intermediate/crl/intermediate.crl"
-    def proc = command.execute()
-    proc.waitFor()
-    assertEquals(proc.exitValue(), 0)
-    assertThat(proc.in.text, containsString("CN=intermediate.test"))
-  }
+  // void testCertificateRevocationList() {
+  //   def dir = System.getProperty("certificate_directory")
+  //   def command = "openssl crl -noout -text -in " + dir + "/intermediate/crl/intermediate.crl"
+  //   def proc = command.execute()
+  //   proc.waitFor()
+  //   assertEquals(proc.exitValue(), 0)
+  //   assertThat(proc.in.text, containsString("CN=intermediate.test"))
+  // }
 
   
 }

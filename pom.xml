@@ -110,7 +110,6 @@
                   <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
                   <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
                   <DEFAULT_DAYS>1</DEFAULT_DAYS>
-                  <CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>
                   <SERVER_NAME>luksi1.test</SERVER_NAME>
                   <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
                 </env>
