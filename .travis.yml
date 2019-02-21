@@ -3,6 +3,12 @@ language: java
 
 sudo: required
 
+stages:
+  - syntax
+  - integration
+  - name: deploy
+    if: branch = master
+
 services:
   - docker
 
@@ -17,16 +23,20 @@ before_install:
 
 jobs:
   include:
-    - stage: "Syntax"
+    - stage: syntax
       name: "Dockerfile checks with Hadolint"
-      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/Dockerfile
+      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/root-certificate/Dockerfile
+      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/intermediate-certificate/Dockerfile
+      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/server-certificate/Dockerfile
     -
       name: "Shell checks with shellchecker"
-      script: docker run -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/*sh
-    - stage: "Integration Tests"
+      script: docker run -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/root-certificate/*.sh
+      script: docker run -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/intermediate-certificate/*.sh
+      script: docker run -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
+    - stage: integration
       name: "docker-maven-plugin integration tests"
       script: mvn verify
-    - stage: "Deploy"
+    - stage: deploy
       name: "Deploy to DockerHub"
       script: 
         - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
