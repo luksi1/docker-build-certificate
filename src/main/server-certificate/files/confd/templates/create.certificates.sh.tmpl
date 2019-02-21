@@ -1,5 +1,15 @@
 #!/bin/sh
 
+if [[ ! -f /export/private/intermediate.key ]]; then
+  echo "You need to have the intermediate's RSA key in /export/private/intermediate.key"
+  exit 1
+fi
+
+if [[ ! -f /export/certs/intermediate.crt ]]; then
+  echo "You need to have the intermediate's public certificate in /export/private/intermediate.crt"
+  exit 1
+fi
+
 mkdir -p /ssl/certs /ssl/crl /ssl/newcerts /ssl/private /ssl/csr /ssl/newcerts
 chmod 700 /ssl/private
 touch /ssl/index.txt
@@ -20,4 +30,3 @@ openssl ca -batch -config /ssl/openssl.cnf \
   -out /export/certs/{{ getenv "SERVER_NAME" }}.crt
 
 chmod 444 /export/certs/{{ getenv "SERVER_NAME" }}.crt
-

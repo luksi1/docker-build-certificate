@@ -17,45 +17,33 @@ touch /ssl/index.txt
 echo 1000 > /ssl/serial
 echo 1000 > /ssl/crlnumber
 
-# cp /export/private/* /ssl/private/
-# cp /export/certs/* /ssl/certs/
-
 # Create our key
 openssl genrsa -aes256 \
-  -out /ssl/private/intermediate.key -passout pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }} 4096
+  -out /export/private/intermediate.key -passout pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }} 4096
 
 # Fix permissions
-chmod 400 /ssl/private/intermediate.key
-
-# Copy to our /export directory
-cp /ssl/private/intermediate.key /export/private/
+chmod 400 /export/private/intermediate.key
 
 # Create a certificate signing request
 openssl req -config /ssl/openssl.cnf -new -sha256 \
-  -key /ssl/private/intermediate.key \
+  -key /export/private/intermediate.key \
   -out /ssl/csr/intermediate.csr \
   -subj "{{ getenv "INTERMEDIATE_SUBJECT" }}" \
   -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
 
-echo "created csr"
 
 # Sign the CSR
 openssl ca -batch -config /ssl/openssl.cnf -extensions v3_intermediate_ca \
   -days {{ getenv "INTERMEDIATE_CERT_EXPIRATION_DAYS" }} -notext -md sha256 \
   -in /ssl/csr/intermediate.csr \
-  -out /ssl/certs/intermediate.crt \
+  -out /export/certs/intermediate.crt \
   -keyfile /export/private/root.key \
   -cert /export/certs/root.crt \
   -key {{ getenv "ROOT_KEY_PASSWORD" }}
 #  -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}
 
 # Fix permissions
-chmod 444 /ssl/certs/intermediate.crt
-
-# Copy to our /export folder
-cp /ssl/certs/intermediate.crt /export/certs/
-
-echo "create csr"
+chmod 444 /export/certs/intermediate.crt
 
 # Create certificate revocation list
 openssl ca -batch -config /ssl/openssl.cnf \

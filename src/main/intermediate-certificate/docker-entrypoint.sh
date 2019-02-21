@@ -15,4 +15,3 @@ export INTERMEDIATE_CERT_EXPIRATION_DAYS
 
 /usr/local/bin/confd -onetime -backend env
 /usr/local/bin/create.certificates.sh
-echo "finished"

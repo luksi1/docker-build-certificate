@@ -30,7 +30,7 @@ rm -rf /var/cache/apk/*
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-RUN mkdir -p /workspace/config
-WORKDIR /workspace
+RUN mkdir -p /ssl
+WORKDIR /ssl
 
 ENTRYPOINT ["sh","/docker-entrypoint.sh"]
