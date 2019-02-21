@@ -1,24 +1,23 @@
 #!/bin/sh
 
-mkdir -p /certs /crl /newcerts /private /csr /newcerts
-chmod 700 /private
-touch /index.txt
-echo 1000 > /serial
-echo 1000 > /crlnumber
+mkdir -p /ssl/certs /ssl/crl /ssl/newcerts /ssl/private /ssl/csr /ssl/newcerts
+chmod 700 /ssl/private
+touch /ssl/index.txt
+echo 1000 > /ssl/serial
+echo 1000 > /ssl/crlnumber
 
 # Create a server certificate key and certificate signing request
-openssl req -nodes -newkey rsa:2048 -keyout /private/{{ getenv "SERVER_NAME" }}.key -out /csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
-chmod 400 /private/{{ getenv "SERVER_NAME" }}.key
+openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
+chmod 400 /export/private/{{ getenv "SERVER_NAME" }}.key
 
 # Sign the certificate
-openssl ca -batch -config /openssl.cnf \
+openssl ca -batch -config /ssl/openssl.cnf \
   -extensions server_cert -days {{ getenv "SERVER_CERT_EXPIRATION_DAYS" }} -notext -md sha256 \
-  -in /csr/{{ getenv "SERVER_NAME" }}.csr \
-  -out /certs/{{ getenv "SERVER_NAME" }}.crt \
-  -keyfile /private/intermediate.key \
-  -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
+  -keyfile /export/private/intermediate.key \
+  -key {{ getenv "INTERMEDIATE_KEY_PASSWORD" }} \
+  -cert /export/certs/intermediate.crt \
+  -in /ssl/csr/{{ getenv "SERVER_NAME" }}.csr \
+  -out /export/certs/{{ getenv "SERVER_NAME" }}.crt
 
-chmod 444 /certs/{{ getenv "SERVER_NAME" }}.crt
+chmod 444 /export/certs/{{ getenv "SERVER_NAME" }}.crt
 
-cp /certs/{{ getenv "SERVER_NAME" }}.crt /export/certs/
-cp /private/{{ getenv "SERVER_NAME" }}.key /export/private/

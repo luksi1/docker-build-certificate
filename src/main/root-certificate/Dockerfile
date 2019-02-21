@@ -16,6 +16,8 @@ RUN apk add --no-cache \
 
 FROM alpine:3.8
 
+ENV CERTIFICATE_TYPE=CA
+
 COPY --from=confd /go/bin/confd /usr/local/bin/confd
 RUN chmod +x /usr/local/bin/confd
 

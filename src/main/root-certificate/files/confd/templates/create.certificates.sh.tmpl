@@ -6,7 +6,8 @@ touch /index.txt
 echo 1000 > /serial
 
 openssl genrsa -aes256 -out /private/root.key -passout pass:{{ getenv "ROOT_KEY_PASSWORD" }} 4096
-chmod 400 /private/root.key
+# chmod 400 /private/root.key
+echo "creating crt"
 openssl req -config /openssl.cnf \
   -key /private/root.key \
   -new -x509 -days {{ getenv "ROOT_CERT_EXPIRATION_DAYS" }} -sha256 -extensions v3_ca \
@@ -14,6 +15,7 @@ openssl req -config /openssl.cnf \
   -subj "{{ getenv "ROOT_SUBJECT" }}" \
   -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}
 
+echo "moving everything to /export"
 mkdir -p /export/private /export/certs
 cp /private/root.key /export/private/
 cp /certs/root.crt /export/certs/

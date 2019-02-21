@@ -64,6 +64,9 @@
                   <!--<CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>-->
                   <ROOT_CERT_EXPIRATION_DAYS>1</ROOT_CERT_EXPIRATION_DAYS>
                 </env>
+                <wait>
+                  <time>10000</time>
+                </wait>
               </run>
             </image>
             <image>
@@ -84,10 +87,15 @@
                 <env>
                   <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
                   <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
+                  <ROOT_KEY_PASSWORD>${password}</ROOT_KEY_PASSWORD>
+                  <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
                   <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
                   <DEFAULT_DAYS>1</DEFAULT_DAYS>
                   <INTERMEDIATE_CERT_EXPIRATION_DAYS>1</INTERMEDIATE_CERT_EXPIRATION_DAYS>
                 </env>
+                <wait>
+                  <time>10000</time>
+                </wait>
               </run>
             </image>
             <image>
@@ -108,11 +116,15 @@
                 <env>
                   <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
                   <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
+                  <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
                   <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
                   <DEFAULT_DAYS>1</DEFAULT_DAYS>
                   <SERVER_NAME>luksi1.test</SERVER_NAME>
                   <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
                 </env>
+                <wait>
+                  <time>10000</time>
+                </wait>
               </run>
             </image>
           </images>

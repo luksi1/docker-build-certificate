@@ -36,14 +36,14 @@ class VerifyCertificatesIT extends GroovyTestCase {
     assertThat(proc.in.text, containsString("CN=luksi1.test"))
   }
 
-  // void testCertificateRevocationList() {
-  //   def dir = System.getProperty("certificate_directory")
-  //   def command = "openssl crl -noout -text -in " + dir + "/intermediate/crl/intermediate.crl"
-  //   def proc = command.execute()
-  //   proc.waitFor()
-  //   assertEquals(proc.exitValue(), 0)
-  //   assertThat(proc.in.text, containsString("CN=intermediate.test"))
-  // }
+  void testCertificateRevocationList() {
+    def dir = System.getProperty("certificate_directory")
+    def command = "openssl crl -noout -text -in " + dir + "/crl/intermediate.crl"
+    def proc = command.execute()
+    proc.waitFor()
+    assertEquals(proc.exitValue(), 0)
+    assertThat(proc.in.text, containsString("CN=intermediate.test"))
+  }
 
   
 }
