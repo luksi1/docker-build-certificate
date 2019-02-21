@@ -1,3 +1,0 @@
-[template]
-src = "root.cnf.tmpl"
-dest = "/workspace/config/root.cnf"

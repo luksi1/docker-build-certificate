@@ -17,8 +17,8 @@ chmod 400 /private/intermediate.key
 cp /private/intermediate.key /export/private/
 
 # Create a certificate signing request
-openssl req -config /intermediate.cnf -new -sha256 \
-  -key /private/intermediate.key \
+openssl req -config /openssl.cnf -new -sha256 \
+  -key /intermediate.key \
   -out /csr/intermediate.csr \
   -subj "{{ getenv "INTERMEDIATE_SUBJECT" }}" \
   -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
@@ -28,7 +28,13 @@ openssl ca -batch -config /root.cnf -extensions v3_intermediate_ca \
   -days {{ getenv "INTERMEDIATE_CERT_EXPIRATION_DAYS" }} -notext -md sha256 \
   -in /csr/intermediate.csr \
   -out /certs/intermediate.crt \
+  -keyfile /private/root.key \
   -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}
+
+# Create certificate revocation list
+openssl ca -batch -config /openssl.cnf \
+  -gencrl -out /crl/intermediate.crl \
+  -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
 
 # Fix permissions
 chmod 444 /certs/intermediate.crt
