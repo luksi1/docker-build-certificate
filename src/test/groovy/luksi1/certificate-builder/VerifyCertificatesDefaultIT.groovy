@@ -7,7 +7,7 @@ import static org.hamcrest.Matchers.is
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.matchers.JUnitMatchers.*
 
-class VerifyCertificatesIT extends GroovyTestCase {
+class VerifyCertificatesDefaultIT extends GroovyTestCase {
 
   void testRootCertificate() {
     def dir = System.getProperty("certificate_directory")

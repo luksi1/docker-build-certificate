@@ -18,28 +18,52 @@
     <docker.verbose>true</docker.verbose>
     <docker.autoCreateCustomNetworks>true</docker.autoCreateCustomNetworks>
   </properties>
-  <dependencies>
-    <dependency>
-      <groupId>org.codehaus.groovy.modules</groupId>
-      <artifactId>groovyws</artifactId>
-      <version>0.5.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-all</artifactId>
-      <version>1.3</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>io.fabric8</groupId>
-        <artifactId>docker-maven-plugin</artifactId>
-        <version>${docker-maven-plugin.version}</version>
-        <configuration>
-          <images>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+	  <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-failsafe-plugin</artifactId>
+	    <version>2.12</version>
+	    <configuration>
+	      <systemPropertyVariables>
+	        <certificate_directory>${project.basedir}/volumes/certificates</certificate_directory>
+	        <root_subject>${root.subject}</root_subject>
+	        <intermediate_subject>${intermediate.subject}</intermediate_subject>
+	        <server_subject>${server.subject}</server_subject>
+	      </systemPropertyVariables>
+	      <includes>
+	        <include>**/*Default*</include>
+	      </includes>
+	    </configuration>
+            <executions>
+	      <execution>
+	        <id>integration-test</id>
+	        <phase>integration-test</phase>
+	        <goals>
+	          <goal>integration-test</goal>
+	        </goals>
+              </execution>
+	      <execution>
+	        <id>verify</id>
+	        <phase>verify</phase>
+	        <goals>
+	          <goal>verify</goal>
+	        </goals>
+	      </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>${docker-maven-plugin.version}</version>
+            <configuration>
+              <images>
             <image>
               <name>luksi1/root-%a:latest</name>
               <build>
@@ -98,10 +122,90 @@
                 </wait>
               </run>
             </image>
+                <image>
+                  <name>luksi1/server-%a:latest</name>
+                  <build>
+                    <dockerFileDir>${project.basedir}/src/main/server-certificate</dockerFileDir>
+                    <tags>
+                      <tag>${project.version}</tag>
+                      <tag>latest</tag>
+                    </tags>
+                  </build>
+                  <run>
+                    <volumes>
+                      <bind>
+                        <volume>${project.basedir}/volumes/certificates:/export</volume>
+                      </bind>
+                    </volumes>
+                    <env>
+                      <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
+                      <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
+                      <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
+                      <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
+                      <DEFAULT_DAYS>1</DEFAULT_DAYS>
+                      <SERVER_NAME>luksi1.test</SERVER_NAME>
+                      <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
+                    </env>
+                    <wait>
+                      <time>10000</time>
+                    </wait>
+                  </run>
+                </image>
+              </images>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>OID</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+	  <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-failsafe-plugin</artifactId>
+	    <version>2.12</version>
+	    <configuration>
+	      <systemPropertyVariables>
+	        <certificate_directory>${project.basedir}/volumes/certificates</certificate_directory>
+	        <root_subject>${root.subject}</root_subject>
+	        <intermediate_subject>${intermediate.subject}</intermediate_subject>
+	        <server_subject>${server.subject}</server_subject>
+	      </systemPropertyVariables>
+	      <includes>
+	        <include>**/*Default*</include>
+	      </includes>
+	    </configuration>
+            <executions>
+	      <execution>
+	        <id>integration-test</id>
+	        <phase>integration-test</phase>
+	        <goals>
+	          <goal>integration-test</goal>
+	        </goals>
+              </execution>
+	      <execution>
+	        <id>verify</id>
+	        <phase>verify</phase>
+	        <goals>
+	          <goal>verify</goal>
+	        </goals>
+	      </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>io.fabric8</groupId>
+            <artifactId>docker-maven-plugin</artifactId>
+            <version>${docker-maven-plugin.version}</version>
+            <configuration>
+              <images>
             <image>
-              <name>luksi1/server-%a:latest</name>
+              <name>luksi1/root-%a:latest</name>
               <build>
-                <dockerFileDir>${project.basedir}/src/main/server-certificate</dockerFileDir>
+                <dockerFileDir>${project.basedir}/src/main/root-certificate</dockerFileDir>
                 <tags>
                   <tag>${project.version}</tag>
                   <tag>latest</tag>
@@ -114,39 +218,100 @@
                   </bind>
                 </volumes>
                 <env>
-                  <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
+                  <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
+                  <ROOT_KEY_PASSWORD>${password}</ROOT_KEY_PASSWORD>
                   <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
-                  <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
                   <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
                   <DEFAULT_DAYS>1</DEFAULT_DAYS>
-                  <SERVER_NAME>luksi1.test</SERVER_NAME>
-                  <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
+                  <!--<CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>-->
+                  <ROOT_CERT_EXPIRATION_DAYS>1</ROOT_CERT_EXPIRATION_DAYS>
                 </env>
                 <wait>
                   <time>10000</time>
                 </wait>
               </run>
             </image>
-          </images>
-        </configuration>
-        <executions>
-          <execution>
-            <id>start</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>build</goal>
-              <goal>start</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>stop</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+            <image>
+              <name>luksi1/intermediate-%a:latest</name>
+              <build>
+                <dockerFileDir>${project.basedir}/src/main/intermediate-certificate</dockerFileDir>
+                <tags>
+                  <tag>${project.version}</tag>
+                  <tag>latest</tag>
+                </tags>
+              </build>
+              <run>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
+                  <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
+                  <ROOT_KEY_PASSWORD>${password}</ROOT_KEY_PASSWORD>
+                  <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
+                  <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
+                  <DEFAULT_DAYS>1</DEFAULT_DAYS>
+                  <INTERMEDIATE_CERT_EXPIRATION_DAYS>1</INTERMEDIATE_CERT_EXPIRATION_DAYS>
+                </env>
+                <wait>
+                  <time>10000</time>
+                </wait>
+              </run>
+            </image>
+                <image>
+                  <name>luksi1/server-%a:latest</name>
+                  <build>
+                    <dockerFileDir>${project.basedir}/src/main/server-certificate</dockerFileDir>
+                    <tags>
+                      <tag>${project.version}</tag>
+                      <tag>latest</tag>
+                    </tags>
+                  </build>
+                  <run>
+                    <volumes>
+                      <bind>
+                        <volume>${project.basedir}/volumes/certificates:/export</volume>
+                      </bind>
+                    </volumes>
+                    <env>
+                      <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
+                      <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
+                      <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
+                      <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
+                      <DEFAULT_DAYS>1</DEFAULT_DAYS>
+                      <SERVER_NAME>luksi1.test</SERVER_NAME>
+                      <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
+                    </env>
+                    <wait>
+                      <time>10000</time>
+                    </wait>
+                  </run>
+                </image>
+              </images>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  <dependencies>
+    <dependency>
+      <groupId>org.codehaus.groovy.modules</groupId>
+      <artifactId>groovyws</artifactId>
+      <version>0.5.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-all</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -174,35 +339,6 @@
         <configuration>
           <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <version>2.12</version>
-        <configuration>
-          <systemPropertyVariables>
-            <certificate_directory>${project.basedir}/volumes/certificates</certificate_directory>
-            <root_subject>${root.subject}</root_subject>
-            <intermediate_subject>${intermediate.subject}</intermediate_subject>
-            <server_subject>${server.subject}</server_subject>
-          </systemPropertyVariables>
-        </configuration>
-        <executions>
-          <execution>
-            <id>integration-test</id>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>integration-test</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>verify</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
