@@ -10,6 +10,8 @@ if [[ ! -f /export/certs/intermediate.crt ]]; then
   exit 1
 fi
 
+cat /ssl/openssl.cnf
+
 mkdir -p /ssl/certs /ssl/crl /ssl/newcerts /ssl/private /ssl/csr /ssl/newcerts
 chmod 700 /ssl/private
 touch /ssl/index.txt
@@ -17,7 +19,9 @@ echo 1000 > /ssl/serial
 echo 1000 > /ssl/crlnumber
 
 # Create a server certificate key and certificate signing request
-openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
+echo "openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj \"{{ getenv "SERVER_SUBJECT" }}\""
+#openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
+openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr
 chmod 400 /export/private/{{ getenv "SERVER_NAME" }}.key
 
 # Sign the certificate

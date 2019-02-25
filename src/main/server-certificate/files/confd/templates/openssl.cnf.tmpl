@@ -1,3 +1,9 @@
+# ASN1 object configuration module
+# Allow a user to specifiy a custom OID
+{{ if getenv "CUSTOM_OID_NAME" }}
+oid_section  = OIDs
+{{ end }}
+
 [ ca ]
 default_ca = CA_default
 
@@ -13,7 +19,7 @@ new_certs_dir = $dir/newcerts
 database = $dir/index.txt
 serial = $dir/serial
 
-# CRL
+# certificate request list information
 crlnumber = $dir/crlnumber
 crl = $dir/crl/ca.crl
 crl_extentions = crl_ext
@@ -28,12 +34,22 @@ default_days = {{ getenv "DEFAULT_DAYS" }}
 unique_subject = no
 default_md = sha256
 
+# this is hardcoded in the image for the root-certificate builder
+# this way we can use the same configuration for the root, intermediate, and server
+# certifiicates
 {{ if eq (getenv "CERTIFICATE_TYPE") "CA"}}
 policy = policy_strict
 {{ else }}
 policy = policy_loose
 {{ end }}
 
+# ASN1 object configuration module
+# Allow a user to specifiy a custom OID
+{{ if getenv "CUSTOM_OID_NAME" }}
+[ OIDs ]
+{{ getenv "CUSTOM_OID_NAME" }}={{ getenv "CUSTOM_OID_ID" }}{{ end }}
+
+# used for the certificate authority
 [ policy_strict ]
 commonName = supplied
 stateOrProvinceName = match
@@ -43,6 +59,7 @@ emailAddress = optional
 localityName = optional
 organizationalUnitName = optional
 
+# used for the server certificates
 [ policy_loose ]
 commonName = supplied
 stateOrProvinceName = optional
@@ -51,27 +68,28 @@ localityName = optional
 countryName = optional
 emailAddress = optional
 organizationalUnitName = optional
+{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }} = optional{{ end }}
 
 [ req ]
 # Options for the `req` tool (`man req`).
 default_bits        = 2048
 distinguished_name  = req_distinguished_name
 string_mask         = utf8only
-
+prompt              = no
 default_md          = sha256
 
 # Extension to add when the -x509 option is used.
 x509_extensions     = v3_ca
 
 [ req_distinguished_name ]
-# See <https://en.wikipedia.org/wiki/Certificate_signing_request>.
-countryName                     = Country Name (2 letter code)
-stateOrProvinceName             = State or Province Name
-localityName                    = Locality Name
-0.organizationName              = Organization Name
-organizationalUnitName          = Organizational Unit Name
-commonName                      = Common Name
-emailAddress                    = Email Address
+{{ if getenv "COUNTRY_NAME" }}countryName={{ getenv "COUNTRY_NAME" }}{{ end }}
+{{ if getenv "STATE_OR_PROVINCE_NAME" }}stateOrProvinceName={{ getenv "STATE_OR_PROVINCE_NAME" }}{{ end }}
+{{ if getenv "LOCALITY_NAME" }}localityName={{ getenv "LOCALITY_NAME" }}{{ end }}
+{{ if getenv "ORGANIZATION_NAME" }}0.organizationName={{ getenv "ORGANIZATION_NAME" }}{{ end }}
+{{ if getenv "ORGANIZATIONAL_UNIT_NAME" }}organizationalUnitName={{ "ORGANIZATIONAL_UNIT_NAME" }}{{ end }}
+commonName={{ getenv "COMMON_NAME" }}
+{{ if getenv "EMAIL_ADDRESS" }}emailAddress={{ getenv "EMAIL_ADDRESS" }}{{ end }}
+{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }}={{ getenv "CUSTOM_OID_VALUE" }}{{ end }}
 
 [ v3_ca ]
 subjectKeyIdentifier = hash
@@ -87,13 +105,15 @@ basicConstraints = critical, CA:true, pathlen:0
 keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 
 [ server_cert ]
-# Extensions for server certificates (`man x509v3_config`).
 basicConstraints = CA:FALSE
 nsCertType = server
 nsComment = "OpenSSL Generated Server Certificate"
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer:always
 keyUsage = critical, digitalSignature, keyEncipherment
+# Allow default for server and client auth, but the ability to extend this
+# Note: Maybe we should scratch serverAuth and clientAuth if someone specifies
+# their own extended key usage?
 {{ if getenv "EXTENDED_KEY_USAGE" }}
 extendedKeyUsage = serverAuth,clientAuth,{{ getenv "EXTENDED_KEY_USAGE" }}
 {{ else }}
@@ -102,16 +122,17 @@ extendedKeyUsage = serverAuth,clientAuth
 {{ if getenv "SUBJECT_ALT_NAMES" }}
 subjectAltName={{ getenv "SUBJECT_ALT_NAMES" }}
 {{ end }}
+# Add your own certificate request list distribution points
 {{ if getenv "CRL_DISTRIBUTION_POINTS" }}
 crlDistributionPoints = {{ getenv "CRL_DISTRIBUTION_POINTS" }}
 {{ end }}
 
+# certificate request list extentions
 [ crl_ext ]
-# Extension for CRLs (`man x509v3_config`).
 authorityKeyIdentifier=keyid:always
 
+# extensions for OSCP signing certificates
 [ ocsp ]
-# Extension for OCSP signing certificates (`man ocsp`).
 basicConstraints = CA:FALSE
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
