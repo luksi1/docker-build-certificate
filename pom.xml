@@ -9,7 +9,7 @@
     <root.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=root.test</root.subject>
     <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=intermediate.test</intermediate.subject>
     <server.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test</server.subject>
-    <server.subject.with.oid>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test/SERIALNUMBER=SE0000000000-S000123456789</server.subject.with.oid>
+    <server.subject.with.oid>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test/SERIALNUMBER=foo</server.subject.with.oid>
     <days>1</days>
     <password>abcd1234</password>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -275,10 +275,7 @@
                       </bind>
                     </volumes>
                     <env>
-                      <COUNTRY_NAME>SE</COUNTRY_NAME>
-                      <STATE_OR_PROVINCE_NAME>Vastra Gotalandsgregionen</STATE_OR_PROVINCE_NAME>
-                      <LOCALITY_NAME>Gothenburg</LOCALITY_NAME>
-                      <COMMON_NAME>luksi1.test</COMMON_NAME>
+                      <SERVER_SUBJECT>${server.subject.with.oid}</SERVER_SUBJECT>
                       <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
                       <INTERMEDIATE_KEY_PASSWORD>${password}</INTERMEDIATE_KEY_PASSWORD>
                       <DEFAULT_CRL_DAYS>1</DEFAULT_CRL_DAYS>
@@ -286,8 +283,8 @@
                       <SERVER_NAME>luksi1.test</SERVER_NAME>
                       <SERVER_CERT_EXPIRATION_DAYS>1</SERVER_CERT_EXPIRATION_DAYS>
                       <CUSTOM_OID_NAME>SERIALNUMBER</CUSTOM_OID_NAME>
+                      <CUSTOM_OID_SHORT_NAME>SN</CUSTOM_OID_SHORT_NAME>
                       <CUSTOM_OID_ID>2.5.4.5</CUSTOM_OID_ID>
-                      <CUSTOM_OID_VALUE>SE0000000000-S000123456789</CUSTOM_OID_VALUE>
                     </env>
                     <wait>
                       <time>10000</time>

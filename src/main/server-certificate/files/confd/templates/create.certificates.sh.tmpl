@@ -18,11 +18,15 @@ touch /ssl/index.txt
 echo 1000 > /ssl/serial
 echo 1000 > /ssl/crlnumber
 
+echo $COMMON_NAME
+
 # Create a server certificate key and certificate signing request
 echo "openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj \"{{ getenv "SERVER_SUBJECT" }}\""
-#openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
-openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr
+openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
+#openssl req -config /ssl/openssl.cnf -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr -subj "{{ getenv "SERVER_SUBJECT" }}"
+# openssl req -nodes -newkey rsa:2048 -keyout /export/private/{{ getenv "SERVER_NAME" }}.key -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr
 chmod 400 /export/private/{{ getenv "SERVER_NAME" }}.key
+echo "finished create csr"
 
 # Sign the certificate
 openssl ca -batch -config /ssl/openssl.cnf \

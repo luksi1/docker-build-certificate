@@ -1,8 +1,6 @@
 # ASN1 object configuration module
 # Allow a user to specifiy a custom OID
-{{ if getenv "CUSTOM_OID_NAME" }}
 oid_section = OIDs
-{{ end }}
 
 [ ca ]
 default_ca = CA_default
@@ -23,10 +21,10 @@ serial = $dir/serial
 crlnumber = $dir/crlnumber
 crl = $dir/crl/ca.crl
 crl_extentions = crl_ext
-default_crl_days = {{ getenv "DEFAULT_CRL_DAYS" }}
+default_crl_days = 1
 
 # Days
-default_days = {{ getenv "DEFAULT_DAYS" }}
+default_days = 1
 
 # Allow issueing a certificate with the same common name
 # This can be useful in the case that a certificate needs to be
@@ -37,17 +35,15 @@ default_md = sha256
 # this is hardcoded in the image for the root-certificate builder
 # this way we can use the same configuration for the root, intermediate, and server
 # certifiicates
-{{ if eq (getenv "CERTIFICATE_TYPE") "CA"}}
-policy = policy_strict
-{{ else }}
+
 policy = policy_loose
-{{ end }}
+
 
 # ASN1 object configuration module
 # Allow a user to specifiy a custom OID
-{{ if getenv "CUSTOM_OID_NAME" }}
+
 [ OIDs ]
-{{ getenv "CUSTOM_OID_NAME" }}={{ getenv "CUSTOM_OID_ID" }}{{ end }}
+foo=1.2.3.45
 
 # used for the certificate authority
 [ policy_strict ]
@@ -68,7 +64,7 @@ localityName = optional
 countryName = optional
 emailAddress = optional
 organizationalUnitName = optional
-{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }} = supplied{{ end }}
+foo = supplied
 
 [ req ]
 # Options for the `req` tool (`man req`).
@@ -89,7 +85,6 @@ localityName                    = Locality Name
 organizationalUnitName          = Organizational Unit Name
 commonName                      = Common Name
 emailAddress                    = Email Address
-{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }} = My OID{{ end }}
 
 [ v3_ca ]
 subjectKeyIdentifier = hash
@@ -98,7 +93,6 @@ basicConstraints = critical, CA:true, pathlen:1
 keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 
 [ v3_intermediate_ca ]
-# Extensions for a typical intermediate CA (`man x509v3_config`).
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid:always,issuer
 basicConstraints = critical, CA:true, pathlen:0
@@ -111,21 +105,7 @@ nsComment = "OpenSSL Generated Server Certificate"
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer:always
 keyUsage = critical, digitalSignature, keyEncipherment
-# Allow default for server and client auth, but the ability to extend this
-# Note: Maybe we should scratch serverAuth and clientAuth if someone specifies
-# their own extended key usage?
-{{ if getenv "EXTENDED_KEY_USAGE" }}
-extendedKeyUsage = serverAuth,clientAuth,{{ getenv "EXTENDED_KEY_USAGE" }}
-{{ else }}
 extendedKeyUsage = serverAuth,clientAuth
-{{ end }}
-{{ if getenv "SUBJECT_ALT_NAMES" }}
-subjectAltName={{ getenv "SUBJECT_ALT_NAMES" }}
-{{ end }}
-# Add your own certificate request list distribution points
-{{ if getenv "CRL_DISTRIBUTION_POINTS" }}
-crlDistributionPoints = {{ getenv "CRL_DISTRIBUTION_POINTS" }}
-{{ end }}
 
 # certificate request list extentions
 [ crl_ext ]
@@ -138,3 +118,4 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
+
