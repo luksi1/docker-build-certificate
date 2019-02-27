@@ -1,0 +1,20 @@
+#!/bin/sh
+
+mkdir -p /ssl/certs /ssl/crl /ssl/newcerts /ssl/private /export/private /export/certs
+chmod 700 /ssl/private
+touch /ssl/index.txt
+echo 1000 > /ssl/serial
+
+# generate rsa key
+openssl genrsa -aes256 -out /export/private/root.key -passout pass:{{ getenv "ROOT_KEY_PASSWORD" }} 4096
+
+# fix permissions
+chmod 400 /export/private/root.key
+
+# generate x509 public certificate
+openssl req -config /openssl.cnf \
+  -key /export/private/root.key \
+  -new -x509 -days {{ getenv "ROOT_CERT_EXPIRATION_DAYS" }} -sha256 -extensions v3_ca \
+  -out /export/certs/root.crt \
+  -subj "{{ getenv "ROOT_SUBJECT" }}" \
+  -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}

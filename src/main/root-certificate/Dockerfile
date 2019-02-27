@@ -14,7 +14,9 @@ RUN apk add --no-cache \
     go install github.com/kelseyhightower/confd && \
     rm -rf "/tmp/v${CONFD_VERSION}.tar.gz"
 
-FROM alpine:3.8
+FROM alpine:3.9
+
+ENV CERTIFICATE_TYPE=CA
 
 COPY --from=confd /go/bin/confd /usr/local/bin/confd
 RUN chmod +x /usr/local/bin/confd
@@ -22,13 +24,13 @@ RUN chmod +x /usr/local/bin/confd
 COPY files/confd /etc/confd
 
 RUN apk update && \
-apk add --no-cache openssl=1.0.2q-r0 && \
+apk add --no-cache openssl=1.1.1a-r1 && \
 rm -rf /var/cache/apk/*
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-RUN mkdir -p /workspace/config
-WORKDIR /workspace
+RUN mkdir -p /ssl
+WORKDIR /ssl
 
 ENTRYPOINT ["sh","/docker-entrypoint.sh"]

@@ -1,0 +1,55 @@
+#!/bin/sh
+
+if [ ! -f /export/private/intermediate.key ]; then
+  echo "You need to have the intermediate's RSA key in /export/private/intermediate.key"
+  exit 1
+fi
+
+if [ ! -f /export/certs/intermediate.crt ]; then
+  echo "You need to have the intermediate's public certificate in /export/private/intermediate.crt"
+  exit 1
+fi
+
+mkdir -p /ssl/certs /ssl/crl /ssl/newcerts /ssl/private /ssl/csr /ssl/newcerts
+chmod 700 /ssl/private
+touch /ssl/index.txt
+# this should not be needed
+# but i'm running into
+# Can't open /ssl/index.txt.attr for reading, No such file or directory
+# 140476929432424:error:02001002:system library:fopen:No such file or directory:crypto/bio/bss_file.c:72:fopen('/ssl/index.txt.attr','r')
+# 140476929432424:error:2006D080:BIO routines:BIO_new_file:no such file:crypto/bio/bss_file.c:79:
+touch /ssl/index.txt.attr
+echo 1000 > /ssl/serial
+echo 1000 > /ssl/crlnumber
+
+# Create our key
+openssl genrsa -aes256 \
+  -out /export/private/{{ getenv "SERVER_NAME" }}.key -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} 2048
+
+# Fix permissions
+chmod 400 /export/private/{{ getenv "SERVER_NAME" }}.key
+
+# Create a certificate signing request
+{{ if getenv "SERVER_SUBJECT" }}
+openssl req -new -sha256 \
+  -key /export/private/{{ getenv "SERVER_NAME" }}.key \
+  -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr \
+  -subj "{{ getenv "SERVER_SUBJECT" }}" \
+  -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }}
+{{ else }}
+/usr/bin/openssl req -config /ssl/openssl.cnf -new -sha256 \
+  -key /export/private/{{ getenv "SERVER_NAME" }}.key \
+  -out /ssl/csr/{{ getenv "SERVER_NAME" }}.csr \
+  -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }}
+{{ end }}
+
+# Sign the certificate
+openssl ca -batch -config /ssl/openssl.cnf \
+  -extensions server_cert -days {{ getenv "SERVER_CERT_EXPIRATION_DAYS" }} -notext -md sha256 \
+  -keyfile /export/private/intermediate.key \
+  -key {{ getenv "INTERMEDIATE_KEY_PASSWORD" }} \
+  -cert /export/certs/intermediate.crt \
+  -in /ssl/csr/{{ getenv "SERVER_NAME" }}.csr \
+  -out /export/certs/{{ getenv "SERVER_NAME" }}.crt
+
+chmod 444 /export/certs/{{ getenv "SERVER_NAME" }}.crt

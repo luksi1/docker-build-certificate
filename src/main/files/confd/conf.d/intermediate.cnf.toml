@@ -1,3 +1,0 @@
-[template]
-src = "intermediate.cnf.tmpl"
-dest = "/workspace/config/intermediate.cnf"
