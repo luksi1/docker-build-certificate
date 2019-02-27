@@ -103,6 +103,7 @@
                   <ROOT_CERT_EXPIRATION_DAYS>${days}</ROOT_CERT_EXPIRATION_DAYS>
                 </env>
                 <wait>
+                  <log>certificate created</log>
                   <time>10000</time>
                 </wait>
               </run>
@@ -132,6 +133,7 @@
                   <INTERMEDIATE_CERT_EXPIRATION_DAYS>${days}</INTERMEDIATE_CERT_EXPIRATION_DAYS>
                 </env>
                 <wait>
+                  <log>certificate created</log>
                   <time>10000</time>
                 </wait>
               </run>
@@ -169,6 +171,7 @@
                   <CUSTOM_OID_ID>${custom.oid.id}</CUSTOM_OID_ID>
                 </env>
                 <wait>
+                  <log>certificate created</log>
                   <time>10000</time>
                 </wait>
               </run>
@@ -229,6 +232,9 @@
           <systemPropertyVariables>
             <certificate_directory>${project.basedir}/volumes/certificates</certificate_directory>
             <serialnumber>SE0000000000-S000123456789</serialnumber>
+            <root_days>${days}</root_days>
+            <intermediate_days>${days}</intermediate_days>
+            <server_days>1</server_days>
           </systemPropertyVariables>
         </configuration>
         <executions>
