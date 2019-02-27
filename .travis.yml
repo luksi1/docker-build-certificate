@@ -37,7 +37,6 @@ jobs:
       name: "docker-maven-plugin integration tests"
       script: mvn docker:build
       script: mvn docker:run
-      script: mvn verify
     - stage: deploy
       name: "Deploy to DockerHub"
       script: 
