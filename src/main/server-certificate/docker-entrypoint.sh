@@ -1,14 +1,10 @@
 #!/bin/sh 
+# shellcheck disable=SC2034
 
 if [ "${SERVER_SUBJECT}x" != "x" ]; then
-  echo $SERVER_SUBJECT
-  SERVER_NAME=`echo $SERVER_SUBJECT | sed -r -n 's/.*CN=(.*)($|\/.*)/\1/p'`
-  echo "server subject"
-  echo $SERVER_NAME
+  SERVER_NAME=$(echo "$SERVER_SUBJECT" | sed -r -n 's/.*CN=(.*)($|\/.*)/\1/p')
 elif [ "${COMMON_NAME}x" != "x" ]; then
-  SERVER_NAME=${COMMON_NAME}
-  echo "common name"
-  echo $SERVER_NAME
+  SERVER_NAME="$COMMON_NAME"
 else
   echo "You must indicate a SERVER_SUBJECT or a COMMON_NAME"
   exit 1
@@ -26,8 +22,6 @@ SERVER_CERT_EXPIRATION_DAYS=${SERVER_CERT_EXPIRATION_DAYS:-"1"}
 export SERVER_CERT_EXPIRATION_DAYS
 
 /usr/local/bin/confd -onetime -backend env
-/usr/local/bin/create.certificates.sh
-
-if [[ $? -eq 0 ]]; then
+if /usr/local/bin/create.certificates.sh; then
   echo "certificate created"
 fi

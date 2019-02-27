@@ -12,8 +12,6 @@ ROOT_CERT_EXPIRATION_DAYS=:${ROOT_CERT_EXPIRATION_DAYS:-"1"}
 export ROOT_CERT_EXPIRATION_DAYS
 
 /usr/local/bin/confd -onetime -backend env
-/usr/local/bin/create.certificates.sh
-
-if [[ $? -eq 0 ]]; then
+if /usr/local/bin/create.certificates.sh; then
   echo "certificate created"
 fi
