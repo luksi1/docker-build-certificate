@@ -36,6 +36,16 @@ class VerifyCertificatesDefaultIT extends GroovyTestCase {
     assertThat(proc.in.text, containsString("CN=luksi1.test"))
   }
 
+  void testServerCertificateSerialNumber() {
+    def dir = System.getProperty("certificate_directory")
+    def serialNumber = System.getProperty("serial_number")
+    def command = "openssl x509 -noout -text -in " + dir + "/certs/luksi1.test.crt"
+    def proc = command.execute()
+    proc.waitFor()
+    assertEquals(proc.exitValue(), 0)
+    assertThat(proc.in.text, containsString("serialNumber=" + serialNumber))
+  }
+
   void testCertificateRevocationList() {
     def dir = System.getProperty("certificate_directory")
     def command = "openssl crl -noout -text -in " + dir + "/crl/intermediate.crl"

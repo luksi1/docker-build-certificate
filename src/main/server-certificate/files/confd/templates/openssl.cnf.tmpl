@@ -68,7 +68,7 @@ localityName = optional
 countryName = optional
 emailAddress = optional
 organizationalUnitName = optional
-{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }} = supplied{{ end }}
+serialNumber = optional
 
 [ req ]
 # Options for the `req` tool (`man req`).
@@ -81,6 +81,10 @@ default_md          = sha256
 # Extension to add when the -x509 option is used.
 x509_extensions     = v3_ca
 
+# With a subject variable we can then simply override the subject on the command line
+# to give some more flexibility. Otherwise, we can simply use a custom OID and specify
+# the parameters in the DN. 
+{{ if getenv "SERVER_SUBJECT" }}
 [ req_distinguished_name ]
 countryName                     = Country Name (2 letter code)
 stateOrProvinceName             = State or Province Name
@@ -89,7 +93,19 @@ localityName                    = Locality Name
 organizationalUnitName          = Organizational Unit Name
 commonName                      = Common Name
 emailAddress                    = Email Address
-{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }} = My OID{{ end }}
+serialNumber                    = Serialnumber of a device
+{{ else }}
+[ req_distinguished_name ]
+{{ if getenv "COUNTRY_NAME" }}countryName={{ getenv "COUNTRY_NAME" }}{{ end }}
+{{ if getenv "STATE_OR_PROVINCE_NAME" }}stateOrProvinceName={{ getenv "STATE_OR_PROVINCE_NAME" }}{{ end }}
+{{ if getenv "LOCALITY_NAME" }}localityName={{ getenv "LOCALITY_NAME" }}{{ end }}
+{{ if getenv "ORGANIZATION_NAME" }}0.organizationName={{ getenv "ORGANIZATION_NAME" }}{{ end }}
+{{ if getenv "ORGANIZATIONAL_UNIT_NAME" }}organizationalUnitName={{ "ORGANIZATIONAL_UNIT_NAME" }}{{ end }}
+commonName={{ getenv "COMMON_NAME" }}
+{{ if getenv "EMAIL_ADDRESS" }}emailAddress={{ getenv "EMAIL_ADDRESS" }}{{ end }}
+{{ if getenv "SERIALNUMBER" }}serialNumber={{ getenv "SERIALNUMBER" }}{{ end }}
+{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }}={{ getenv "CUSTOM_OID_VALUE" }}{{ end }}
+{{ end }}
 
 [ v3_ca ]
 subjectKeyIdentifier = hash

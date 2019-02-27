@@ -15,3 +15,7 @@ export INTERMEDIATE_CERT_EXPIRATION_DAYS
 
 /usr/local/bin/confd -onetime -backend env
 /usr/local/bin/create.certificates.sh
+if [[ $? -eq 0 ]]; then
+  echo "certificate created"
+fi
+
