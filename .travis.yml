@@ -23,20 +23,19 @@ before_install:
 
 jobs:
   include:
-#    - stage: syntax
-#      name: "Dockerfile checks with Hadolint"
-#      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/root-certificate/Dockerfile
-#      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/intermediate-certificate/Dockerfile
-#      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/server-certificate/Dockerfile
-#    -
-#      name: "Shell checks with shellchecker"
-#      script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/root-certificate/*.sh
-#      script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/intermediate-certificate/*.sh
-#      script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
+    - stage: syntax
+      name: "Dockerfile checks with Hadolint"
+      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/root-certificate/Dockerfile
+      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/intermediate-certificate/Dockerfile
+      script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/server-certificate/Dockerfile
+    -
+      name: "Shell checks with shellchecker"
+      script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/root-certificate/*.sh
+      script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/intermediate-certificate/*.sh
+      script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
     - stage: integration
       name: "docker-maven-plugin integration tests"
-      script: mvn docker:build
-      script: mvn docker:run
+      script: mvn verify
     - stage: deploy
       name: "Deploy to DockerHub"
       script: 
