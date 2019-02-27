@@ -228,10 +228,7 @@
         <configuration>
           <systemPropertyVariables>
             <certificate_directory>${project.basedir}/volumes/certificates</certificate_directory>
-            <root_subject>${root.subject}</root_subject>
-            <intermediate_subject>${intermediate.subject}</intermediate_subject>
-            <server_subject>${server.subject}</server_subject>
-            <serial_number>SE0000000000-S000123456789</serial_number>
+            <serialnumber>SE0000000000-S000123456789</serialnumber>
           </systemPropertyVariables>
         </configuration>
         <executions>
