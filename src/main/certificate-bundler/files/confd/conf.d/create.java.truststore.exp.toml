@@ -1,0 +1,5 @@
+[template]
+src = "create.java.truststore.exp.tmpl"
+dest = "/tmp/create.java.truststore.exp"
+owner = "root"
+mode = "0700"

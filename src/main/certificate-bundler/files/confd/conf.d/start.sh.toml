@@ -1,0 +1,5 @@
+[template]
+src = "start.sh.tmpl"
+dest = "/start.sh"
+owner = "root"
+mode = "0700"

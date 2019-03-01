@@ -16,7 +16,7 @@
         <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=intermediate.test</intermediate.subject>
         <server.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test/serialNumber=SE0000000000-S000123456789</server.subject>
         <days>1</days>
-        <password>abcd1234</password>
+        <password>Abcd1234</password>
         <custom.oid.name></custom.oid.name>
         <custom.oid.id></custom.oid.id>
         <custom.oid.value></custom.oid.value>
@@ -35,7 +35,7 @@
         <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=intermediate.test</intermediate.subject>
         <server.subject></server.subject>
         <days>1</days>
-        <password>abcd1234</password>
+        <password>Abcd1234</password>
         <custom.oid.name></custom.oid.name>
         <custom.oid.id></custom.oid.id>
         <custom.oid.value></custom.oid.value>
@@ -172,6 +172,33 @@
                 </env>
                 <wait>
                   <log>certificate created</log>
+                  <time>10000</time>
+                </wait>
+              </run>
+            </image>
+            <image>
+              <name>luksi1/certificate-bundler:latest</name>
+              <build>
+                <dockerFileDir>${project.basedir}/src/main/certificate-bundler</dockerFileDir>
+                <tags>
+                  <tag>${project.version}</tag>
+                  <tag>latest</tag>
+                </tags>
+              </build>
+              <run>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <SERVER_NAME>luksi1.test</SERVER_NAME>
+                  <CREATE_TRUSTSTORE>true</CREATE_TRUSTSTORE>
+                  <CREATE_KEYSTORE>true</CREATE_KEYSTORE>
+                  <ROOT_CERTIFICATE_FILE_PATH>/export/certs/root.crt</ROOT_CERTIFICATE_FILE_PATH>
+                  <INTERMEDIATE_CERTIFICATE_FILE_PATH>/export/certs/intermediate.crt</INTERMEDIATE_CERTIFICATE_FILE_PATH>
+                </env>
+                <wait>
                   <time>10000</time>
                 </wait>
               </run>
