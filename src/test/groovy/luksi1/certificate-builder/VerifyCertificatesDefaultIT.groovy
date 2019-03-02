@@ -51,24 +51,24 @@ class VerifyCertificatesDefaultIT extends GroovyTestCase {
     def command = "openssl crl -noout -text -in " + dir + "/crl/intermediate.crl"
     def proc = command.execute()
     proc.waitFor()
-    assertEquals(proc.exitValue(), 0)
+    assertEquals(0, proc.exitValue())
     assertThat(proc.in.text, containsString("CN=intermediate.test"))
   }
 
   void testServerCertificateExpirationDate() {
     def dir = System.getProperty("certificate_directory")
     def days = System.getProperty("server_days") as Integer
-    def time = days*86400
-    def expired = time-10
+    def expired = days*86400
+    def valid = expired-30
 
     // the certificate should not have expired 1 day ago - 10 seconds, ie 86400-10 seconds ago
-    def command1 = "openssl x509 -noout -checkend " + expired + " -in " + dir + "/certs/luksi1.test.crt"
+    def command1 = "openssl x509 -noout -checkend " + valid + " -in " + dir + "/certs/luksi1.test.crt"
     def proc1 = command1.execute()
     proc1.waitFor()
-    assertEquals(proc1.exitValue(), 0)
+    assertEquals(0, proc1.exitValue())
 
     // the certificate should have expired 1 day ago, ie 86400 seconds ago
-    def command2 = "openssl x509 -noout -checkend " + time + " -in " + dir + "/certs/luksi1.test.crt"
+    def command2 = "openssl x509 -noout -checkend " + expired + " -in " + dir + "/certs/luksi1.test.crt"
     def proc2 = command2.execute()
     proc2.waitFor()
     assertEquals(proc2.exitValue(), 1)

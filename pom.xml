@@ -199,7 +199,8 @@
                   <INTERMEDIATE_CERTIFICATE_FILE_PATH>/export/certs/intermediate.crt</INTERMEDIATE_CERTIFICATE_FILE_PATH>
                 </env>
                 <wait>
-                  <time>10000</time>
+                  <log>bundles created</log>
+                  <time>30000</time>
                 </wait>
               </run>
             </image>
@@ -262,6 +263,7 @@
             <root_days>${days}</root_days>
             <intermediate_days>${days}</intermediate_days>
             <server_days>1</server_days>
+            <password>${password}</password>
           </systemPropertyVariables>
         </configuration>
         <executions>
