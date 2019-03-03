@@ -9,6 +9,10 @@ stages:
   - name: deploy
     if: branch = master
 
+before_install:
+  - sudp apt-get update
+  - sudo apt-get install -y openssl openjdk-8-jre-headless maven
+
 services:
   - docker
 
@@ -35,9 +39,10 @@ jobs:
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
     - stage: integration
       name: "docker-maven-plugin integration tests"
-      script: mvn verify
+      script: sudo mvn verify
     - stage: deploy
       name: "Deploy to DockerHub"
       script: 
         - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        - mvn docker:build
         - mvn docker:push

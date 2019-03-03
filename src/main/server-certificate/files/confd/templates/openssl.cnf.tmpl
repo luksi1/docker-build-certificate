@@ -25,9 +25,6 @@ crl = $dir/crl/ca.crl
 crl_extentions = crl_ext
 default_crl_days = {{ getenv "DEFAULT_CRL_DAYS" }}
 
-# Days
-default_days = {{ getenv "DEFAULT_DAYS" }}
-
 # Allow issueing a certificate with the same common name
 # This can be useful in the case that a certificate needs to be
 # renewed
@@ -96,15 +93,15 @@ emailAddress                    = Email Address
 serialNumber                    = Serialnumber of a device
 {{ else }}
 [ req_distinguished_name ]
-{{ if getenv "COUNTRY_NAME" }}countryName={{ getenv "COUNTRY_NAME" }}{{ end }}
-{{ if getenv "STATE_OR_PROVINCE_NAME" }}stateOrProvinceName={{ getenv "STATE_OR_PROVINCE_NAME" }}{{ end }}
-{{ if getenv "LOCALITY_NAME" }}localityName={{ getenv "LOCALITY_NAME" }}{{ end }}
-{{ if getenv "ORGANIZATION_NAME" }}0.organizationName={{ getenv "ORGANIZATION_NAME" }}{{ end }}
-{{ if getenv "ORGANIZATIONAL_UNIT_NAME" }}organizationalUnitName={{ "ORGANIZATIONAL_UNIT_NAME" }}{{ end }}
-commonName={{ getenv "COMMON_NAME" }}
-{{ if getenv "EMAIL_ADDRESS" }}emailAddress={{ getenv "EMAIL_ADDRESS" }}{{ end }}
-{{ if getenv "SERIALNUMBER" }}serialNumber={{ getenv "SERIALNUMBER" }}{{ end }}
-{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }}={{ getenv "CUSTOM_OID_VALUE" }}{{ end }}
+{{ if getenv "COUNTRY_NAME" }}countryName="{{ getenv "COUNTRY_NAME" }}"{{ end }}
+{{ if getenv "STATE_OR_PROVINCE_NAME" }}stateOrProvinceName="{{ getenv "STATE_OR_PROVINCE_NAME" }}"{{ end }}
+{{ if getenv "LOCALITY_NAME" }}localityName="{{ getenv "LOCALITY_NAME" }}"{{ end }}
+{{ if getenv "ORGANIZATION_NAME" }}0.organizationName="{{ getenv "ORGANIZATION_NAME" }}"{{ end }}
+{{ if getenv "ORGANIZATIONAL_UNIT_NAME" }}organizationalUnitName="{{ "ORGANIZATIONAL_UNIT_NAME" }}"{{ end }}
+commonName="{{ getenv "COMMON_NAME" }}"
+{{ if getenv "EMAIL_ADDRESS" }}emailAddress="{{ getenv "EMAIL_ADDRESS" }}"{{ end }}
+{{ if getenv "SERIALNUMBER" }}serialNumber="{{ getenv "SERIALNUMBER" }}"{{ end }}
+{{ if getenv "CUSTOM_OID_NAME" }}{{ getenv "CUSTOM_OID_NAME" }}="{{ getenv "CUSTOM_OID_VALUE" }}"{{ end }}
 {{ end }}
 
 [ v3_ca ]
