@@ -200,7 +200,7 @@
                 </env>
                 <wait>
                   <log>bundles created</log>
-                  <time>30000</time>
+                  <time>120000</time>
                 </wait>
               </run>
             </image>
