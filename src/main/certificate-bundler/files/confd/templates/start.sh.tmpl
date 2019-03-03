@@ -4,8 +4,6 @@
 {{ if eq (getenv "CREATE_TRUSTSTORE") "true" }}
 expect /tmp/create.java.truststore.exp
 keytool -delete -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}
-echo "truststore created"
-{{ end }}
 
 # Add root to truststore
 {{ if getenv "ROOT_CERTIFICATE_FILE_PATH" }}
@@ -22,6 +20,9 @@ keytool -noprompt -import -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias {
 rm intermediate.der
 {{ end }}
 
+# end "CREATE_TRUSTSTORE" check
+{{ end }}
+
 # Create keystore
 {{ if eq (getenv "CREATE_KEYSTORE") "true" }}
 echo "creating keystore"
@@ -29,14 +30,9 @@ expect /tmp/create.java.keystore.exp
 keytool -delete -storepass {{ getenv "KEYSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "KEYSTORE_FILE_PATH" }}
 {{ end }}
 
+# Create the PKCS12 file
 # First combine the key and the public cert into a PKCS12 file
 cat {{ getenv "SERVER_KEY_FILE_PATH" }} {{ getenv "SERVER_CERTIFICATE_FILE_PATH" }} | openssl pkcs12 -export -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }} -out "{{ getenv "SERVER_PKCS12_FILE_PATH" }}" -name "{{ getenv "SERVER_KEYSTORE_ALIAS" }}"
-# cat {{ getenv "SERVER_KEY_FILE_PATH" }} {{ getenv "SERVER_CERTIFICATE_FILE_PATH" }} | openssl pkcs12 -export -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }} -out "{{ getenv "SERVER_PKCS12_FILE_PATH" }}" 
 
 # Second, create the .jks file
-# keytool -storepass {{ getenv "KEYSTORE_PASSWORD" }} -srcstorepass {{ getenv "SERVER_KEY_PASSWORD" }} -deststorepass {{ getenv "KEYSTORE_PASSWORD" }} -importkeystore -destalias "{{ getenv "SERVER_KEYSTORE_ALIAS" }}" -srckeystore {{ getenv "SERVER_PKCS12_FILE_PATH" }} -srcstoretype pkcs12 -destkeystore {{ getenv "KEYSTORE_FILE_PATH" }} 
 keytool -storepass {{ getenv "KEYSTORE_PASSWORD" }} -srcstorepass {{ getenv "SERVER_KEY_PASSWORD" }} -deststorepass {{ getenv "KEYSTORE_PASSWORD" }} -importkeystore -srckeystore {{ getenv "SERVER_PKCS12_FILE_PATH" }} -srcstoretype pkcs12 -destkeystore {{ getenv "KEYSTORE_FILE_PATH" }} 
-
-# Change names to match server cert and make the accessible under /export/
-# mv {{ getenv "KEYSTORE_FILE" }} /export/jks/{{ getenv "KEYSTORE_FILE" }}
-# mv server.p12 /export/pkcs12/{{ getenv "SERVER_NAME" }}.p12

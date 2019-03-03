@@ -33,6 +33,16 @@ if [ ${SERVER_PKCS12_FILE_PATH}x == "x" ]; then
   export SERVER_PKCS12_FILE_PATH
 fi
 
+if [ ${ROOT_CERTIFICATE_FILE_PATH}x == "x" ]; then
+  ROOT_CERTIFICATE_FILE_PATH="/export/certs/root.crt"
+  export ROOT_CERTIFICATE_FILE_PATH
+fi
+
+if [ ${INTERMEDIATE_CERTIFICATE_FILE_PATH}x == "x" ]; then
+  INTERMEDIATE_CERTIFICATE_FILE_PATH="/export/certs/intermediate.crt"
+  export INTERMEDIATE_CERTIFICATE_FILE_PATH
+fi
+
 /usr/local/bin/confd -onetime -backend env
 
 if /start.sh; then
