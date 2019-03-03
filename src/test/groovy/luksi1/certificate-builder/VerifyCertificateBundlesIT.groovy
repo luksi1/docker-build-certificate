@@ -39,7 +39,6 @@ class VerifyCertificateBundlesIT extends GroovyTestCase {
     def dir = System.getProperty("certificate_directory")
     def password = System.getProperty("password")
     def command = "keytool -list -v -storetype pkcs12 -keystore " + dir + "/pkcs12/luksi1.test.p12 -storepass " + password
-    println(command)
     def proc = command.execute()
     proc.waitFor()
     def stdout = proc.in.text
