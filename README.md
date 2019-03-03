@@ -118,32 +118,32 @@ The path to the intermediate certificate. This will be used to insert the root c
 
 Default: /export/certs/intermediate.crt
 
-###### TRUSTSTORE_PASSWORD
+##### TRUSTSTORE_PASSWORD
 The Java truststore password
 
 Default: Abcd1234
 
-###### KEYSTORE_PASSWORD
+##### KEYSTORE_PASSWORD
 The Java keystore password
 
 Default: Abcd1234
 
-###### SERVER_KEY_PASSWORD
+##### SERVER_KEY_PASSWORD
 The server's certificate key password
 
 Default: Abcd1234
 
-###### ROOT_TRUSTSTORE_ALIAS
+##### ROOT_TRUSTSTORE_ALIAS
 The alias name of the root certificate in the truststore.
 
 Default: root
 
-###### INTERMEDIATE_TRUSTSTORE_ALIAS
+##### INTERMEDIATE_TRUSTSTORE_ALIAS
 The alias name of the intermediate certificate in the truststore.
 
 Default: intermediate
 
-###### INTERMEDIATE_TRUSTSTORE_ALIAS
+##### INTERMEDIATE_TRUSTSTORE_ALIAS
 The alias name of the server certificate in the keystore.
 
 Default: server
