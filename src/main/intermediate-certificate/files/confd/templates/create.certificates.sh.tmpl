@@ -14,6 +14,12 @@ mkdir -p /ssl/certs /ssl/crl /ssl/newcerts /ssl/private /ssl/csr /export/crl
 
 chmod 700 /ssl/private
 touch /ssl/index.txt
+# I'm not sure why this is needed
+# locally this is working, but during testing with TravisCI, the image is complaining
+# that this file does not exist. Since this file simply
+# needs to be touched, I'm simply touching it for the time being until I find a solution
+touch /ssl/index.txt.attr
+
 echo 1000 > /ssl/serial
 echo 1000 > /ssl/crlnumber
 
