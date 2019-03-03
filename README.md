@@ -38,14 +38,6 @@ This needs need to be specified in forward slash notation, ie: /C=US/ST=New York
 ##### ROOT_KEY_PASSWORD
 Default: Abcd1234
 
-##### DEFAULT_CRL_DAYS
-The default amount of days for the Certificate Revocation List
-Default: 1
-
-##### DEFAULT_DAYS
-The default days for a certificate to be valid.
-Default: 1
-
 ##### ROOT_CERT_EXPIRATION_DAYS
 The amount of days that your root certificate will be valid
 Default: 1
@@ -58,12 +50,8 @@ This needs need to be specified in forward slash notation, ie: /C=US/ST=New York
 ##### INTERMEDIATE_KEY_PASSWORD
 Default: Abcd1234
 
-##### DEFAULT_CRL_DAYS
-The default amount of days for the Certificate Revocation List
-Default: 1
-
-##### DEFAULT_DAYS
-The default days for a certificate to be valid.
+##### CRL_EXPIRATION_DAYS
+The amount of days your Certificate Revocation List will be valid
 Default: 1
 
 ##### INTERMEDIATE_CERT_EXPIRATION_DAYS
@@ -77,14 +65,6 @@ This needs need to be specified in forward slash notation, ie: /C=US/ST=New York
 
 ##### SERVER_KEY_PASSWORD
 Default: Abcd1234
-
-##### DEFAULT_CRL_DAYS
-The default amount of days for the Certificate Revocation List
-Default: 1
-
-##### DEFAULT_DAYS
-The default days for a certificate to be valid.
-Default: 1
 
 ##### SERVER_CERT_EXPIRATION_DAYS
 The amount of days that your server certificate will be valid
