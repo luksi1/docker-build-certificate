@@ -28,6 +28,8 @@ docker run -t -v $(pwd)/certs:/export -e INTERMEDIATE_SUBJECT=/C=SE/ST=Vastra Go
 docker run -t -v $(pwd)/certs:/export -e SERVER_SUBJECT=/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=dummy/CN=dummy.test -e SERVER_KEY_PASSWORD=Abcd1234 INTERMEDIATE_KEY_PASSWORD=Abcd1234 -e luksi1/server-certificate-builder:latest
 ```
 
+##### Producing a Java keystore and PKCS12 bundle
+
 The following would produce a truststore with the aforementioned root and intermediate, as well as a Java keystore with your server certificate and key. Additionally, a PKCS12 bundle would created.
 
 ```
