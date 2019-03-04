@@ -119,7 +119,7 @@ Default: Abcd1234
 ##### SERVER_KEY_PASSWORD
 The server's certificate key password. The default is no password.
 
-Default: <empty>
+Default: empty
 
 ##### ROOT_TRUSTSTORE_ALIAS
 The alias name of the root certificate in the truststore.
