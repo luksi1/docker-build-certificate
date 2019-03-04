@@ -3,8 +3,10 @@
 
 if [ "${SERVER_SUBJECT}x" != "x" ]; then
   SERVER_NAME=$(echo "$SERVER_SUBJECT" | sed -r -n 's/.*CN=(.*)($|\/.*)/\1/p')
+  export SERVER_NAME
 elif [ "${COMMON_NAME}x" != "x" ]; then
   SERVER_NAME="$COMMON_NAME"
+  export SERVER_NAME
 else
   echo "You must indicate a SERVER_SUBJECT or a COMMON_NAME"
   exit 1
