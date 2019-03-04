@@ -97,29 +97,29 @@ If this is not set, no truststore will be created.
 Set to "true" to create a Java keystore with your server certificates key pair.
 
 ##### ROOT_CERTIFICATE_FILE_PATH
-The path to the root certificate. This will be used to insert the root certificate into the truststore
+The path to the root certificate. This will be used to insert the root certificate into the truststore.
 
 Default: /export/certs/root.crt
 
 ##### INTERMEDIATE_CERTIFICATE_FILE_PATH
-The path to the intermediate certificate. This will be used to insert the root certificate into the truststore
+The path to the intermediate certificate. This will be used to insert the root certificate into the truststore.
 
 Default: /export/certs/intermediate.crt
 
 ##### TRUSTSTORE_PASSWORD
-The Java truststore password
+The Java truststore password.
 
 Default: Abcd1234
 
 ##### KEYSTORE_PASSWORD
-The Java keystore password
+The Java keystore password.
 
 Default: Abcd1234
 
 ##### SERVER_KEY_PASSWORD
-The server's certificate key password
+The server's certificate key password. The default is no password.
 
-Default: Abcd1234
+Default: <empty>
 
 ##### ROOT_TRUSTSTORE_ALIAS
 The alias name of the root certificate in the truststore.
