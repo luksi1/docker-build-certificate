@@ -131,7 +131,7 @@ The alias name of the intermediate certificate in the truststore.
 
 Default: intermediate
 
-##### INTERMEDIATE_TRUSTSTORE_ALIAS
+##### SERVER_KEYSTORE_ALIAS
 The alias name of the server certificate in the keystore.
 
 Default: server
