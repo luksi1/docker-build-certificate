@@ -23,8 +23,15 @@ echo 1000 > /ssl/serial
 echo 1000 > /ssl/crlnumber
 
 # Create our key
-openssl genrsa -aes256 \
-  -out /export/private/{{ getenv "SERVER_NAME" }}.key -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} 2048
+if [ ${SERVER_KEY_PASSWORD}x == "x" ]; then
+  openssl genrsa -aes256 \
+    -out foo.key -passout pass:Abcd1234
+  openssl rsa -in foo.key -passin pass:Abcd1234 -out /export/private/{{ getenv "SERVER_NAME" }}.key
+else
+  openssl genrsa -aes256 \
+    -out /export/private/{{ getenv "SERVER_NAME" }}.key -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }}
+fi
+  
 
 # Fix permissions
 chmod 400 /export/private/{{ getenv "SERVER_NAME" }}.key
