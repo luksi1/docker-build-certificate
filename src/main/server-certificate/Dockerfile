@@ -29,7 +29,8 @@ rm -rf /var/cache/apk/*
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-RUN mkdir -p /ssl
+RUN mkdir -p /ssl && \
+    chmod 777 /ssl
 WORKDIR /ssl
 
 ENTRYPOINT ["sh","/docker-entrypoint.sh"]

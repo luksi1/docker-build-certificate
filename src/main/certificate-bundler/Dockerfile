@@ -33,7 +33,8 @@ RUN apk add --no-cache \
     openjdk8 \
     expect && \
     mkdir /ssl && \
-    chmod +x /usr/local/bin/confd /docker-entrypoint.sh
+    chmod +x /usr/local/bin/confd /docker-entrypoint.sh && \
+    chmod 777 /ssl
 
 WORKDIR /ssl
 VOLUME /export

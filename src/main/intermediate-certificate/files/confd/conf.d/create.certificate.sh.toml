@@ -1,5 +1,4 @@
 [template]
 src = "create.certificates.sh.tmpl"
-dest = "/usr/local/bin/create.certificates.sh"
-owner = "root"
+dest = "/ssl/create.certificates.sh"
 mode = "0700"

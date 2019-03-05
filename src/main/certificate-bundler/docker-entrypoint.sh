@@ -45,6 +45,6 @@ fi
 
 /usr/local/bin/confd -onetime -backend env
 
-if /start.sh; then
+if /ssl/start.sh; then
   echo "bundles created"
 fi

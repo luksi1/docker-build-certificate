@@ -12,7 +12,7 @@ CRL_EXPIRATION_DAYS=${CRL_EXPIRATION_DAYS:-"1"}
 export CRL_EXPIRATION_DAYS
 
 /usr/local/bin/confd -onetime -backend env
-if /usr/local/bin/create.certificates.sh; then
+if /ssl/create.certificates.sh; then
   echo "certificate created"
 fi
 

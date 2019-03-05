@@ -37,9 +37,9 @@ jobs:
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/root-certificate/*.sh
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/intermediate-certificate/*.sh
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
-    # - stage: integration
-    #   name: "docker-maven-plugin integration tests"
-    #   script: mvn verify
+    - stage: integration
+      name: "docker-maven-plugin integration tests"
+      script: mvn verify
     - stage: deploy
       name: "Deploy to DockerHub"
       script: 

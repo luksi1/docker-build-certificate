@@ -18,7 +18,7 @@ openssl genrsa -aes256 -out /export/private/root.key -passout pass:{{ getenv "RO
 chmod 400 /export/private/root.key
 
 # generate x509 public certificate
-openssl req -config /openssl.cnf \
+openssl req -config /ssl/openssl.cnf \
   -key /export/private/root.key \
   -new -x509 -days {{ getenv "ROOT_CERT_EXPIRATION_DAYS" }} -sha256 -extensions v3_ca \
   -out /export/certs/root.crt \

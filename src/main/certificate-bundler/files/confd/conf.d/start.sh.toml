@@ -1,5 +1,4 @@
 [template]
 src = "start.sh.tmpl"
-dest = "/start.sh"
-owner = "root"
+dest = "/ssl/start.sh"
 mode = "0700"
