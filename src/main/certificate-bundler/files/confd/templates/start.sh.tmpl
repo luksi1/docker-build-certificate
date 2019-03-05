@@ -10,6 +10,7 @@ keytool -delete -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias endeca -key
 rm -f {{ getenv "TRUSTSTORE_FILE_PATH" }} || true
 expect /tmp/create.java.truststore.exp
 keytool -delete -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}
+{{ end }}
 
 # Add root to truststore
 {{ if getenv "ROOT_CERTIFICATE_FILE_PATH" }}
