@@ -89,12 +89,14 @@ This image provides two functions.
 The server name which will be used to create a unique P12 file under the directory pkcs12
 
 ##### CREATE_TRUSTSTORE
-Set to "true" to create a Java truststore with your intermediate and root certificates
+Set to "true" to initialize a Java truststore with your intermediate and root certificates. Alternatively, you can set this to "force" to force remove the truststore first before re-creating.
 
-If this is not set, no truststore will be created.
+If this is not set, no truststore will be initialized
 
 ##### CREATE_KEYSTORE
-Set to "true" to create a Java keystore with your server certificates key pair.
+Set to "true" to initialize a Java keystore with your server certificates key pair. Alternatively, you can set this to "force" to force remove the keystore first before re-creating.
+
+If this is not set, no keystore will be initialized.
 
 ##### ROOT_CERTIFICATE_FILE_PATH
 The path to the root certificate. This will be used to insert the root certificate into the truststore.

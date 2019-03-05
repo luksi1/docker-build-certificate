@@ -5,6 +5,12 @@
 expect /tmp/create.java.truststore.exp
 keytool -delete -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}
 
+# Remove truststore and re-create if force
+{{ if eq (getenv "CREATE_TRUSTSTORE") "force" }}
+rm -f {{ getenv "TRUSTSTORE_FILE_PATH" }} || true
+expect /tmp/create.java.truststore.exp
+keytool -delete -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}
+
 # Add root to truststore
 {{ if getenv "ROOT_CERTIFICATE_FILE_PATH" }}
 openssl x509 -outform der -in {{ getenv "ROOT_CERTIFICATE_FILE_PATH" }} -out root.der
@@ -25,6 +31,14 @@ rm intermediate.der
 
 # Create keystore
 {{ if eq (getenv "CREATE_KEYSTORE") "true" }}
+echo "creating keystore"
+expect /tmp/create.java.keystore.exp
+keytool -delete -storepass {{ getenv "KEYSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "KEYSTORE_FILE_PATH" }}
+{{ end }}
+
+# Remove keystore and re-create if force
+{{ if eq (getenv "CREATE_KEYSTORE") "force" }}
+rm -f {{ getenv "KEYSTORE_FILE_PATH" }} || true
 echo "creating keystore"
 expect /tmp/create.java.keystore.exp
 keytool -delete -storepass {{ getenv "KEYSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "KEYSTORE_FILE_PATH" }}
