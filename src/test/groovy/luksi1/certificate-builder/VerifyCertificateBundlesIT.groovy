@@ -42,8 +42,6 @@ class VerifyCertificateBundlesIT extends GroovyTestCase {
     def proc = command.execute()
     proc.waitFor()
     def stdout = proc.in.text
-    println(stdout)
-    println("exit status: " + proc.exitValue())
     assertEquals(proc.exitValue(), 0)
     assertThat(stdout, containsString("CN=luksi1.test"))
     assertThat(stdout, containsString("CN=intermediate.test"))
