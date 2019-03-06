@@ -25,6 +25,7 @@ before_install:
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
   - mkdir -p volumes/certificates
+  - chmod -R 777 volumes
   - echo $UID
 
 jobs:
