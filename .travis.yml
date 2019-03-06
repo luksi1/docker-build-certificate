@@ -11,7 +11,7 @@ stages:
 
 before_install:
   - sudp apt-get update
-  - sudo apt-get install -y openssl openjdk-8-jre-headless maven
+  - sudo apt-get install -y openssl
 
 services:
   - docker
@@ -24,6 +24,9 @@ env:
 before_install:
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
+  - mkdir -p volumes/certificates
+  - echo "My USERID equals: ${UID}"
+  - echo $UID
 
 jobs:
   include:
@@ -39,7 +42,6 @@ jobs:
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
     - stage: integration
       name: "docker-maven-plugin integration tests"
-      script: mkdir -p volumes/certificates
       script: mvn verify
     - stage: deploy
       name: "Deploy to DockerHub"
