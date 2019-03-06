@@ -25,7 +25,6 @@ before_install:
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
   - mkdir -p volumes/certificates
-  - echo "My USERID equals: ${UID}"
   - echo $UID
 
 jobs:
