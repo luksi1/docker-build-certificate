@@ -46,6 +46,16 @@ class VerifyCertificateBundlesIT extends GroovyTestCase {
     assertThat(stdout, containsString("CN=luksi1.test"))
     assertThat(stdout, containsString("CN=intermediate.test"))
   }
+
+  void testPKCS12FilePermissions() {
+    def dir = System.getProperty("certificate_directory")
+    def command = "/bin/ls -l " + dir + "/pkcs12/luksi1.test.p12"
+    def proc = command.execute()
+    proc.waitFor()
+    def stdout = proc.in.text
+    assertEquals(proc.exitValue(), 0)
+    assertThat(stdout, containsString("-r--------"))
+  }
  
 }
 

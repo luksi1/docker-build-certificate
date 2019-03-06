@@ -31,10 +31,9 @@ else
   openssl genrsa -aes256 \
     -out /export/private/{{ getenv "SERVER_NAME" }}.key -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }}
 fi
-  
 
 # Fix permissions
-chmod 400 /export/private/{{ getenv "SERVER_NAME" }}.key
+chmod {{ getenv "SERVER_KEY_PERMISSIONS" }} /export/private/{{ getenv "SERVER_NAME" }}.key
 
 # Create a certificate signing request
 {{ if getenv "SERVER_SUBJECT" }}

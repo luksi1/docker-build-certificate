@@ -27,6 +27,8 @@ keytool -noprompt -import -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias {
 rm intermediate.der
 {{ end }}
 
+chmod {{ getenv "TRUSTSTORE_FILE_PERMISSIONS" }} {{ getenv "TRUSTSTORE_FILE_PATH" }}
+
 # end "CREATE_TRUSTSTORE" check
 {{ end }}
 
@@ -47,7 +49,11 @@ keytool -delete -storepass {{ getenv "KEYSTORE_PASSWORD" }} -alias endeca -keyst
 
 # Create the PKCS12 file
 # First combine the key and the public cert into a PKCS12 file
-cat {{ getenv "SERVER_KEY_FILE_PATH" }} {{ getenv "SERVER_CERTIFICATE_FILE_PATH" }} | openssl pkcs12 -export -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }} -out "{{ getenv "SERVER_PKCS12_FILE_PATH" }}" -name "{{ getenv "SERVER_KEYSTORE_ALIAS" }}"
+cat {{ getenv "SERVER_KEY_FILE_PATH" }} {{ getenv "SERVER_CERTIFICATE_FILE_PATH" }} | openssl pkcs12 -export -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }} -out "{{ getenv "PKCS12_FILE_PATH" }}" -name "{{ getenv "SERVER_KEYSTORE_ALIAS" }}"
+
+chmod {{ getenv "PKCS12_FILE_PERMISSIONS" }} {{ getenv "PKCS12_FILE_PATH" }}
 
 # Second, create the .jks file
-keytool -storepass {{ getenv "KEYSTORE_PASSWORD" }} -srcstorepass {{ getenv "SERVER_KEY_PASSWORD" }} -deststorepass {{ getenv "KEYSTORE_PASSWORD" }} -importkeystore -srckeystore {{ getenv "SERVER_PKCS12_FILE_PATH" }} -srcstoretype pkcs12 -destkeystore {{ getenv "KEYSTORE_FILE_PATH" }} 
+keytool -storepass {{ getenv "KEYSTORE_PASSWORD" }} -srcstorepass {{ getenv "SERVER_KEY_PASSWORD" }} -deststorepass {{ getenv "KEYSTORE_PASSWORD" }} -importkeystore -srckeystore {{ getenv "PKCS12_FILE_PATH" }} -srcstoretype pkcs12 -destkeystore {{ getenv "KEYSTORE_FILE_PATH" }} 
+
+chmod {{ getenv "KEYSTORE_FILE_PERMISSIONS" }} {{ getenv "KEYSTORE_FILE_PATH" }}

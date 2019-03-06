@@ -50,6 +50,11 @@ Default: Abcd1234
 The amount of days that your root certificate will be valid
 Default: 1
 
+##### ROOT_KEY_PERMISSIONS
+The file permissions for the root key file.
+Default: 400
+
+
 ### Intermediate certificate options
 
 ##### INTERMEDIATE_SUBJECT
@@ -66,6 +71,10 @@ Default: 1
 The amount of days that your intermediate certificate will be valid
 Default: 1
 
+##### INTERMEDIATE_KEY_PERMISSIONS
+The file permissions for the intermediate key
+Default: 400
+
 ### Server/Client certificate options
 
 ##### SERVER_SUBJECT
@@ -77,6 +86,10 @@ Default: Abcd1234
 ##### SERVER_CERT_EXPIRATION_DAYS
 The amount of days that your server certificate will be valid
 Default: 1
+
+##### SERVER_KEY_PERMISSIONS
+The file permissions for the server key file.
+Default: 400
 
 ### Certificate bundler
 
@@ -100,40 +113,48 @@ If this is not set, no keystore will be initialized.
 
 ##### ROOT_CERTIFICATE_FILE_PATH
 The path to the root certificate. This will be used to insert the root certificate into the truststore.
-
 Default: /export/certs/root.crt
 
 ##### INTERMEDIATE_CERTIFICATE_FILE_PATH
 The path to the intermediate certificate. This will be used to insert the root certificate into the truststore.
-
 Default: /export/certs/intermediate.crt
 
 ##### TRUSTSTORE_PASSWORD
 The Java truststore password.
-
 Default: Abcd1234
 
 ##### KEYSTORE_PASSWORD
 The Java keystore password.
-
 Default: Abcd1234
 
 ##### SERVER_KEY_PASSWORD
 The server's certificate key password. The default is no password.
-
 Default: empty
 
 ##### ROOT_TRUSTSTORE_ALIAS
 The alias name of the root certificate in the truststore.
-
 Default: root
 
 ##### INTERMEDIATE_TRUSTSTORE_ALIAS
 The alias name of the intermediate certificate in the truststore.
-
 Default: intermediate
 
 ##### SERVER_KEYSTORE_ALIAS
 The alias name of the server certificate in the keystore.
-
 Default: server
+
+##### PKCS12_FILE_PATH
+The file path to your PKCS12 file. This will be the PKCS12 file for your server certificate.
+Default: /export/pkcs12/<SERVERNAME>.p12
+
+##### TRUSTSTORE_FILE_PERMISSIONS
+The file permissions for the Java truststore.
+Default: 600
+
+##### KEYSTORE_FILE_PERMISSIONS
+The file permissions for the Java keystore.
+Default: 600
+
+##### PKCS12_FILE_PERMISSIONS
+The file permissions for the PKCS12 file.
+Default: 400

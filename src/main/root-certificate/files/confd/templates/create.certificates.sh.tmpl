@@ -15,7 +15,7 @@ echo 1000 > /ssl/serial
 openssl genrsa -aes256 -out /export/private/root.key -passout pass:{{ getenv "ROOT_KEY_PASSWORD" }} 4096
 
 # fix permissions
-chmod 400 /export/private/root.key
+chmod {{ getenv "ROOT_KEY_PERMISSIONS" }} /export/private/root.key
 
 # generate x509 public certificate
 openssl req -config /ssl/openssl.cnf \
@@ -24,3 +24,5 @@ openssl req -config /ssl/openssl.cnf \
   -out /export/certs/root.crt \
   -subj "{{ getenv "ROOT_SUBJECT" }}" \
   -passin pass:{{ getenv "ROOT_KEY_PASSWORD" }}
+
+chmod 444 /export/certs/root.crt

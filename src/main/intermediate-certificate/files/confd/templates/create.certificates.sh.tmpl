@@ -28,7 +28,7 @@ openssl genrsa -aes256 \
   -out /export/private/intermediate.key -passout pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }} 4096
 
 # Fix permissions
-chmod 400 /export/private/intermediate.key
+chmod {{ getenv "INTERMEDIATE_KEY_PERMISSIONS" }} /export/private/intermediate.key
 
 # Create a certificate signing request
 openssl req -config /ssl/openssl.cnf -new -sha256 \
@@ -36,7 +36,6 @@ openssl req -config /ssl/openssl.cnf -new -sha256 \
   -out /ssl/csr/intermediate.csr \
   -subj "{{ getenv "INTERMEDIATE_SUBJECT" }}" \
   -passin pass:{{ getenv "INTERMEDIATE_KEY_PASSWORD" }}
-
 
 # Sign the CSR
 openssl ca -batch -config /ssl/openssl.cnf -extensions v3_intermediate_ca \
