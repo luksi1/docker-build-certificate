@@ -1,9 +1,11 @@
 #!/bin/sh
 
 # Create truststore
+{{ if getenv "CREATE_TRUSTSTORE" }}
 {{ if eq (getenv "CREATE_TRUSTSTORE") "true" }}
 expect /tmp/create.java.truststore.exp
 keytool -delete -storepass {{ getenv "TRUSTSTORE_PASSWORD" }} -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}
+{{ end }}
 
 # Remove truststore and re-create if force
 {{ if eq (getenv "CREATE_TRUSTSTORE") "force" }}
@@ -49,7 +51,7 @@ keytool -delete -storepass {{ getenv "KEYSTORE_PASSWORD" }} -alias endeca -keyst
 
 # Create the PKCS12 file
 # First combine the key and the public cert into a PKCS12 file
-cat {{ getenv "SERVER_KEY_FILE_PATH" }} {{ getenv "SERVER_CERTIFICATE_FILE_PATH" }} | openssl pkcs12 -export -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }} -out "{{ getenv "PKCS12_FILE_PATH" }}" -name "{{ getenv "SERVER_KEYSTORE_ALIAS" }}"
+cat {{ getenv "SERVER_KEY_FILE_PATH" }} {{ getenv "SERVER_CERTIFICATE_FILE_PATH" }} {{ if getenv "INTERMEDIATE_CERTIFICATE_FILE_PATH" }} {{ if getenv "ROOT_CERTIFICATE_FILE_PATH" }} | openssl pkcs12 -export -passout pass:{{ getenv "SERVER_KEY_PASSWORD" }} -passin pass:{{ getenv "SERVER_KEY_PASSWORD" }} -out "{{ getenv "PKCS12_FILE_PATH" }}" -name "{{ getenv "SERVER_KEYSTORE_ALIAS" }}"
 
 chmod {{ getenv "PKCS12_FILE_PERMISSIONS" }} {{ getenv "PKCS12_FILE_PATH" }}
 

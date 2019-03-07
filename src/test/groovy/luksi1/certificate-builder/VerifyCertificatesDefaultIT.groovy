@@ -59,9 +59,9 @@ class VerifyCertificatesDefaultIT extends GroovyTestCase {
     def dir = System.getProperty("certificate_directory")
     def days = System.getProperty("server_days") as Integer
     def expired = days*86400
-    def valid = expired-30
+    def valid = expired-240
 
-    // the certificate should not have expired 1 day ago - 10 seconds, ie 86400-10 seconds ago
+    // the certificate should not have expired 1 day ago - 240 seconds
     def command1 = "openssl x509 -noout -checkend " + valid + " -in " + dir + "/certs/luksi1.test.crt"
     def proc1 = command1.execute()
     proc1.waitFor()
