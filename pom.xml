@@ -139,7 +139,6 @@
                   <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
                   <ROOT_KEY_PASSWORD>${password}</ROOT_KEY_PASSWORD>
                   <SERVER_KEY_PASSWORD>${password}</SERVER_KEY_PASSWORD>
-                  <!--<CRL_DISTRIBUTION_POINTS>${crl.distribution.points}</CRL_DISTRIBUTION_POINTS>-->
                   <ROOT_CERT_EXPIRATION_DAYS>${days}</ROOT_CERT_EXPIRATION_DAYS>
                 </env>
                 <wait>
