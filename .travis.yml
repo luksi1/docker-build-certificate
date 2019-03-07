@@ -24,8 +24,12 @@ env:
 before_install:
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
-  - mkdir -p volumes/certificates || true
+  - mkdir -p volumes/certificates/private || true
+  - mkdir -p volumes/certificates/certs || true
+  - mkdir -p volumes/certificates/jks || true
+  - mkdir -p volumes/certificates/pkcs12 || true
   - sudo chown -R "${UID}:$(id -g travis)" volumes
+  - ls -lR volumes
 
 jobs:
   include:
