@@ -36,20 +36,18 @@ jobs:
   include:
     - stage: syntax
       name: "Dockerfile checks with Hadolint"
-      script: ls -lR volumes
       script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/root-certificate/Dockerfile
       script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/intermediate-certificate/Dockerfile
       script: docker run --rm -i lukasmartinelli/hadolint hadolint - < src/main/server-certificate/Dockerfile
     -
       name: "Shell checks with shellchecker"
-      script: ls -lR volumes
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/root-certificate/*.sh
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/intermediate-certificate/*.sh
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
     - stage: integration
       name: "docker-maven-plugin integration tests"
-      script: ls -lR volumes
-      script: mvn verify -Ptravis
+      script: sudo mkdir -p volumes/certificates || true
+      script: sudo chown -R "${UID}:$(id -g travis)" volumes && mvn verify -Ptravis
     - stage: deploy
       name: "Deploy to DockerHub"
       script: 
