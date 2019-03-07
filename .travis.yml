@@ -29,6 +29,7 @@ before_install:
   - mkdir -p volumes/certificates/jks || true
   - mkdir -p volumes/certificates/pkcs12 || true
   - sudo chown -R "${UID}:$(id -g travis)" volumes
+  - sudo chmod -R 777 volumes
   - ls -lR volumes
 
 jobs:
