@@ -26,7 +26,7 @@
         <locality.name></locality.name>
         <common.name></common.name>
         <serialnumber></serialnumber>
-        <user>1</user>
+        <user.uid>1</user.uid>
       </properties>
     </profile>
     <profile>
@@ -46,7 +46,7 @@
         <locality.name></locality.name>
         <common.name></common.name>
         <serialnumber></serialnumber>
-        <user>2000</user>
+        <user.uid>2000</user.uid>
       </properties>
     </profile>
     <profile>
@@ -66,7 +66,7 @@
         <locality.name></locality.name>
         <common.name></common.name>
         <serialnumber></serialnumber>
-        <user>1012</user>
+        <user.uid>1012</user.uid>
       </properties>
     </profile>
     <profile>
@@ -129,7 +129,7 @@
                 </tags>
               </build>
               <run>
-                <user>${user}</user>
+                <user>${user.uid}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>
@@ -157,7 +157,7 @@
                 </tags>
               </build>
               <run>
-                <user>${user}</user>
+                <user>${user.uid}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>
@@ -187,7 +187,7 @@
                 </tags>
               </build>
               <run>
-                <user>${user}</user>
+                <user>${user.uid}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>
@@ -224,7 +224,7 @@
                 </tags>
               </build>
               <run>
-                <user>${user}</user>
+                <user>${user.uid}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>
