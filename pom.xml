@@ -236,6 +236,9 @@
                   <CREATE_KEYSTORE>true</CREATE_KEYSTORE>
                   <ROOT_CERTIFICATE_FILE_PATH>/export/certs/root.crt</ROOT_CERTIFICATE_FILE_PATH>
                   <INTERMEDIATE_CERTIFICATE_FILE_PATH>/export/certs/intermediate.crt</INTERMEDIATE_CERTIFICATE_FILE_PATH>
+                  <PKCS12_FILE_PERMISSIONS>644</PKCS12_FILE_PERMISSIONS>
+                  <TRUSTSTORE_FILE_PERMISSIONS>644</TRUSTSTORE_FILE_PERMISSIONS>
+                  <KEYSTORE_FILE_PERMISSIONS>644</KEYSTORE_FILE_PERMISSIONS>
                 </env>
                 <wait>
                   <log>bundles created</log>

@@ -24,13 +24,8 @@ env:
 before_install:
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
-  - mkdir -p volumes/certificates/private || true
-  - mkdir -p volumes/certificates/certs || true
-  - mkdir -p volumes/certificates/jks || true
-  - mkdir -p volumes/certificates/pkcs12 || true
-  - sudo chown -R "${UID}:$(id -g travis)" volumes
+  - mkdir -p volumes/certificates || true
   - sudo chmod -R 777 volumes
-  - ls -lR volumes
 
 jobs:
   include:
@@ -46,8 +41,7 @@ jobs:
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
     - stage: integration
       name: "docker-maven-plugin integration tests"
-      script: sudo mkdir -p volumes/certificates || true
-      script: sudo chown -R "${UID}:$(id -g travis)" volumes && mvn verify -Ptravis
+      script: mvn verify
     - stage: deploy
       name: "Deploy to DockerHub"
       script: 
