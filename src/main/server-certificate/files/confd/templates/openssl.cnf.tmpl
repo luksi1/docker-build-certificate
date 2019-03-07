@@ -119,8 +119,8 @@ keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 
 [ server_cert ]
 basicConstraints = CA:FALSE
-nsCertType = server
-nsComment = "OpenSSL Generated Server Certificate"
+nsCertType = server,client
+nsComment = "CI/CD generated client/server certificate"
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer:always
 keyUsage = critical, digitalSignature, keyEncipherment

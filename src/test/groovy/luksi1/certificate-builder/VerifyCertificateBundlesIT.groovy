@@ -45,6 +45,7 @@ class VerifyCertificateBundlesIT extends GroovyTestCase {
     assertEquals(proc.exitValue(), 0)
     assertThat(stdout, containsString("CN=luksi1.test"))
     assertThat(stdout, containsString("CN=intermediate.test"))
+    assertThat(stdout, containsString("CN=root.test"))
   }
 
   void testPKCS12FilePermissions() {

@@ -26,6 +26,47 @@
         <locality.name></locality.name>
         <common.name></common.name>
         <serialnumber></serialnumber>
+        <user>1</user>
+      </properties>
+    </profile>
+    <profile>
+      <id>travis</id>
+      <properties>
+        <root.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=root.test</root.subject>
+        <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=intermediate.test</intermediate.subject>
+        <server.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test/serialNumber=SE0000000000-S000123456789</server.subject>
+        <days>1</days>
+        <password>Abcd1234</password>
+        <custom.oid.name></custom.oid.name>
+        <custom.oid.id></custom.oid.id>
+        <custom.oid.value></custom.oid.value>
+        <crl.distribution.points></crl.distribution.points>
+        <country.name></country.name>
+        <state.or.province.name></state.or.province.name>
+        <locality.name></locality.name>
+        <common.name></common.name>
+        <serialnumber></serialnumber>
+        <user>2000</user>
+      </properties>
+    </profile>
+    <profile>
+      <id>vgas0993</id>
+      <properties>
+        <root.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=root.test</root.subject>
+        <intermediate.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=intermediate.test</intermediate.subject>
+        <server.subject>/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=luksi1/CN=luksi1.test/serialNumber=SE0000000000-S000123456789</server.subject>
+        <days>1</days>
+        <password>Abcd1234</password>
+        <custom.oid.name></custom.oid.name>
+        <custom.oid.id></custom.oid.id>
+        <custom.oid.value></custom.oid.value>
+        <crl.distribution.points></crl.distribution.points>
+        <country.name></country.name>
+        <state.or.province.name></state.or.province.name>
+        <locality.name></locality.name>
+        <common.name></common.name>
+        <serialnumber></serialnumber>
+        <user>1012</user>
       </properties>
     </profile>
     <profile>
@@ -88,7 +129,7 @@
                 </tags>
               </build>
               <run>
-                <user>2000</user>
+                <user>${user}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>
@@ -117,7 +158,7 @@
                 </tags>
               </build>
               <run>
-                <user>2000</user>
+                <user>${user}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>
@@ -147,7 +188,7 @@
                 </tags>
               </build>
               <run>
-                <user>2000</user>
+                <user>${user}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>
@@ -184,7 +225,7 @@
                 </tags>
               </build>
               <run>
-                <user>2000</user>
+                <user>${user}</user>
                 <volumes>
                   <bind>
                     <volume>${project.basedir}/volumes/certificates:/export</volume>

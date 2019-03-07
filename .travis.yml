@@ -42,7 +42,7 @@ jobs:
       script: docker run --rm -v "$(pwd)":/mnt koalaman/shellcheck:stable src/main/server-certificate/*.sh
     - stage: integration
       name: "docker-maven-plugin integration tests"
-      script: mvn verify
+      script: mvn verify -Ptravis
     - stage: deploy
       name: "Deploy to DockerHub"
       script: 
