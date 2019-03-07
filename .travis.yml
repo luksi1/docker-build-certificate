@@ -41,6 +41,7 @@ jobs:
       name: "docker-maven-plugin integration tests"
       script: sudo rm -rf volumes || true
       script: mkdir -p volumes/certificates
+      script: sudo chmod -R 777 volumes
       script: mvn verify -Ptravis
     - stage: deploy
       name: "Deploy to DockerHub"
