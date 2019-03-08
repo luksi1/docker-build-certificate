@@ -9,10 +9,6 @@ stages:
   - name: deploy
     if: branch = master
 
-before_install:
-  - sudp apt-get update
-  - sudo apt-get install -y openssl
-
 services:
   - docker
 
@@ -22,6 +18,7 @@ env:
     - secure: aw8Sc2rOjTY7fRyA2F7IHV+yTTLQ97thFqcY7aMSOw5/m7D6vezvrFVYtOZlSo8ZQ/oXRziDqLMkek+eKuxbk7DbX+pse9rPVUdIazauWKEKz8mXZ+1ZXs1ft+DIfREAUT4oKP90jVdhvaSAPwmDehf5Ad7THfB+2vR2HHjU15Gvv2jl2AdnRiwezlfm8KdGlCR7CPdXA83xpESBmyQWe4X6p3FaRZ5f4+314MNMvvv2alrq0K96r8J6/7/TM6hMmW6rVU295ftgoCXcqVRB7vJXjcQ9xWaQTXbC61hVoKIbrOl5B4I+bXs+3xPBl58diMUUWqAQKAN/nOxd99G8dD8P/SUvor9ndeLL524ZyT5OzawV15upw+t02p6LZHvtzFS8ImMIzIb10Y3Ll1j2yuKqCMyOk+Xdbc0QoW7Y4xIeruf1sbFyjNXZwohMgRew3+egyV9ChyGw0CSro8RFU425cIffkpJkPAhORK3ivEK59zLbEpCWXiODxpVZ7VB3+CzMFoyBEtoIVR9Ey/lpxawDfTbuduEDUCm3Nlgk72PNiYWkZdmLZXA17xK8eqzrMvohemZ94Bikm1XMju5HXoFSc9GVMUnWZuc6t61BwG/olZ+laQ+HkgVmgyJws7SRa0n8CHvgy04U/yqU/81G1pSpspBlfj8dD6TacnERmcQ=
 
 before_install:
+  - sudo apt-get update && sudo apt-get install -y openssl
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
   - mkdir -p volumes/certificates || true

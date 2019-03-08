@@ -55,7 +55,7 @@ class VerifyCertificateBundlesIT extends GroovyTestCase {
     proc.waitFor()
     def stdout = proc.in.text
     assertEquals(proc.exitValue(), 0)
-    assertThat(stdout, containsString("-r--------"))
+    assertThat(stdout, containsString("-rw-r--r--"))
   }
  
 }
