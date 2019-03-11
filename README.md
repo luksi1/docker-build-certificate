@@ -41,81 +41,81 @@ docker run -t -v $(pwd)/certs:/export -e SERVER_NAME=dummy.test -e CREATE_TRUSTS
 Set the appropriate POM "properties" variables. Additionally note the use of the user option so that you can produce a file owned by your own UID (or whatever UID you wish to own your certificate files).
 
 ```maven
-            <image>
-              <name>luksi1/root-certificate-builder:latest</name>
-              <run>
-                <user>${user.uid}</user>
-                <volumes>
-                  <bind>
-                    <volume>${project.basedir}/volumes/certificates:/export</volume>
-                  </bind>
-                </volumes>
-                <env>
-                  <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
-                </env>
-                <wait>
-                  <log>certificate created</log>
-                  <time>10000</time>
-                </wait>
-              </run>
-            </image>
-            <image>
-              <name>luksi1/intermediate-certificate-builder:latest</name>
-              <run>
-                <user>${user.uid}</user>
-                <volumes>
-                  <bind>
-                    <volume>${project.basedir}/volumes/certificates:/export</volume>
-                  </bind>
-                </volumes>
-                <env>
-                  <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
-                </env>
-                <wait>
-                  <log>certificate created</log>
-                  <time>10000</time>
-                </wait>
-              </run>
-            </image>
-            <image>
-              <name>luksi1/server-certificate-builder:latest</name>
-              <run>
-                <user>${user.uid}</user>
-                <volumes>
-                  <bind>
-                    <volume>${project.basedir}/volumes/certificates:/export</volume>
-                  </bind>
-                </volumes>
-                <env>
-                  <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
-                  <SERVER_NAME>${server.name}</SERVER_NAME>
-                </env>
-                <wait>
-                  <log>certificate created</log>
-                  <time>10000</time>
-                </wait>
-              </run>
-            </image>
-            <image>
-              <name>luksi1/certificate-bundler:latest</name>
-              <run>
-                <user>${user.uid}</user>
-                <volumes>
-                  <bind>
-                    <volume>${project.basedir}/volumes/certificates:/export</volume>
-                  </bind>
-                </volumes>
-                <env>
-                  <SERVER_NAME>${server.name}</SERVER_NAME>
-                  <CREATE_TRUSTSTORE>force</CREATE_TRUSTSTORE>
-                  <CREATE_KEYSTORE>force</CREATE_KEYSTORE>
-                </env>
-                <wait>
-                  <log>bundles created</log>
-                  <time>120000</time>
-                </wait>
-              </run>
-            </image>
+  <image>
+    <name>luksi1/root-certificate-builder:latest</name>
+    <run>
+      <user>${user.uid}</user>
+      <volumes>
+        <bind>
+          <volume>${project.basedir}/volumes/certificates:/export</volume>
+        </bind>
+      </volumes>
+      <env>
+        <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
+      </env>
+      <wait>
+        <log>certificate created</log>
+        <time>10000</time>
+      </wait>
+    </run>
+  </image>
+  <image>
+    <name>luksi1/intermediate-certificate-builder:latest</name>
+    <run>
+      <user>${user.uid}</user>
+      <volumes>
+        <bind>
+          <volume>${project.basedir}/volumes/certificates:/export</volume>
+        </bind>
+      </volumes>
+      <env>
+        <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
+      </env>
+      <wait>
+        <log>certificate created</log>
+        <time>10000</time>
+      </wait>
+    </run>
+  </image>
+  <image>
+    <name>luksi1/server-certificate-builder:latest</name>
+    <run>
+      <user>${user.uid}</user>
+      <volumes>
+        <bind>
+          <volume>${project.basedir}/volumes/certificates:/export</volume>
+        </bind>
+      </volumes>
+      <env>
+        <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
+        <SERVER_NAME>${server.name}</SERVER_NAME>
+      </env>
+      <wait>
+        <log>certificate created</log>
+        <time>10000</time>
+      </wait>
+    </run>
+  </image>
+  <image>
+    <name>luksi1/certificate-bundler:latest</name>
+    <run>
+      <user>${user.uid}</user>
+      <volumes>
+        <bind>
+          <volume>${project.basedir}/volumes/certificates:/export</volume>
+        </bind>
+      </volumes>
+      <env>
+        <SERVER_NAME>${server.name}</SERVER_NAME>
+        <CREATE_TRUSTSTORE>force</CREATE_TRUSTSTORE>
+        <CREATE_KEYSTORE>force</CREATE_KEYSTORE>
+      </env>
+      <wait>
+        <log>bundles created</log>
+        <time>120000</time>
+      </wait>
+    </run>
+  </image>
 ```
 
 ### Root certificate options
