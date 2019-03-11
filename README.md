@@ -8,19 +8,19 @@ Create a server/client certificate chain with an intermediate, root, and certifi
 
 ## Description
 
-These images are primarily intended to create certificates in a CI/CD pipeline. This image can create a certificate chain and a CRL on the fly so that dummy certificates can be used for testing.
+These images are primarily intended to create certificates in a CI/CD pipeline. These images can create a certificate chain and a CRL on the fly so that dummy certificates can be used for testing. Previously, we used self-signed certificates for this purpose, but ran into problems when multiple hosts needed to be created and trust one another. This solves both issues. 
 
-On the other hand, the certificates here are completely valid, so feel free to use them as you wish!
+That being said, the certificates here are completely valid, so feel free to use them as you wish!
 
 ## Usage
 
-This repository builds four images, which can create a root, intermediate, server/client certificate, and a certificate bundler image so that you can bundle Java keystore files and PKCS12 files. The idea is that you can mix and match however you see fit.
+This repository builds four images, which can create a root certificate, intermediate certificate, server/client certificate, and a certificate bundler image so that you can bundle Java keystore files and PKCS12 files. The idea is that you can mix and match however you see fit.
 
 ### Up and running
 
 ##### Creating a certificate chain
 
-The following command will produce a root, intermediate, and a server certificate that will be valid for one day. Adjust the ROOT_SUBJECT, INTERMEDIATE_SUBJECT, and/or SERVER_SUBJECT to fit your needs.
+The following command will produce a root, intermediate, and a server/client certificate that will be valid for one day. Adjust the ROOT_SUBJECT, INTERMEDIATE_SUBJECT, and/or SERVER_SUBJECT to fit your needs.
 
 ```
 docker run -t -v $(pwd)/certs:/export -e ROOT_SUBJECT=/C=SE/ST=Vastra Gotaland/L=Gothenburg/O=dummy/CN=root.test -e ROOT_KEY_PASSWORD=Abcd1234 luksi1/root-certificate-builder:latest
