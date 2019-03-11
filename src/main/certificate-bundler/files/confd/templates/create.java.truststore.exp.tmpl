@@ -47,6 +47,8 @@ set timeout 30
 # match_max 100000
 # send -- "keytool -genkey -keyalg RSA -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}"
 # expect -exact "keytool -genkey -keyalg RSA -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}"
+set env(TERM) vt100
+set env(SHELL) /bin/sh
 spawn keytool -genkey -keyalg RSA -alias endeca -keystore {{ getenv "TRUSTSTORE_FILE_PATH" }}
 send -- "\r"
 expect -exact "\r
