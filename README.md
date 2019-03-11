@@ -2,13 +2,13 @@
 
 # Server certificate builder
 
+## Summary
+
+Create a server/client certificate chain with an intermediate, root, and certificate revocation list.
+
 ## Description
 
-Create a server certificate chain with an intermediate, root, and certificate revocation list.
-
-## Use cases
-
-This is primarily intended to create certificates in a CI/CD pipeline. This image can create a certificate chain and a CRL on the fly so that fake certificates can be used for testing.
+These images are primarily intended to create certificates in a CI/CD pipeline. This image can create a certificate chain and a CRL on the fly so that dummy certificates can be used for testing.
 
 On the other hand, the certificates here are completely valid, so feel free to use them as you wish!
 
@@ -30,10 +30,92 @@ docker run -t -v $(pwd)/certs:/export -e SERVER_SUBJECT=/C=SE/ST=Vastra Gotaland
 
 ##### Producing a Java keystore and PKCS12 bundle
 
-The following would produce a truststore with the aforementioned root and intermediate, as well as a Java keystore with your server certificate and key. Additionally, a PKCS12 bundle would created.
+The following would produce a Java truststore with the aforementioned root and intermediate certificates, as well as a Java keystore with your server certificate and key. Additionally, a PKCS12 bundle would created.
 
 ```
 docker run -t -v $(pwd)/certs:/export -e SERVER_NAME=dummy.test -e CREATE_TRUSTSTORE=true -e CREATE_KEYSTORE=true luksi1/certificate-bundler:latest
+```
+
+##### Using Fabric8's docker-maven-plugin
+
+Set the appropriate POM "properties" variables. Additionally note the use of the user option so that you can produce a file owned by your own UID (or whatever UID you wish to own your certificate files).
+
+```maven
+            <image>
+              <name>luksi1/root-certificate-builder:latest</name>
+              <run>
+                <user>${user.uid}</user>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <ROOT_SUBJECT>${root.subject}</ROOT_SUBJECT>
+                </env>
+                <wait>
+                  <log>certificate created</log>
+                  <time>10000</time>
+                </wait>
+              </run>
+            </image>
+            <image>
+              <name>luksi1/intermediate-certificate-builder:latest</name>
+              <run>
+                <user>${user.uid}</user>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <INTERMEDIATE_SUBJECT>${intermediate.subject}</INTERMEDIATE_SUBJECT>
+                </env>
+                <wait>
+                  <log>certificate created</log>
+                  <time>10000</time>
+                </wait>
+              </run>
+            </image>
+            <image>
+              <name>luksi1/server-certificate-builder:latest</name>
+              <run>
+                <user>${user.uid}</user>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <SERVER_SUBJECT>${server.subject}</SERVER_SUBJECT>
+                  <SERVER_NAME>${server.name}</SERVER_NAME>
+                </env>
+                <wait>
+                  <log>certificate created</log>
+                  <time>10000</time>
+                </wait>
+              </run>
+            </image>
+            <image>
+              <name>luksi1/certificate-bundler:latest</name>
+              <run>
+                <user>${user.uid}</user>
+                <volumes>
+                  <bind>
+                    <volume>${project.basedir}/volumes/certificates:/export</volume>
+                  </bind>
+                </volumes>
+                <env>
+                  <SERVER_NAME>${server.name}</SERVER_NAME>
+                  <CREATE_TRUSTSTORE>force</CREATE_TRUSTSTORE>
+                  <CREATE_KEYSTORE>force</CREATE_KEYSTORE>
+                </env>
+                <wait>
+                  <log>bundles created</log>
+                  <time>120000</time>
+                </wait>
+              </run>
+            </image>
 ```
 
 ### Root certificate options
