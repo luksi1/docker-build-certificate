@@ -238,6 +238,11 @@ The alias name of the server certificate in the keystore.
 
 Default: server
 
+##### KEYSTORE_FILE_PATH
+The file path to your Java keystore file.
+
+Default: /export/jks/keystore.jks
+
 ##### PKCS12_FILE_PATH
 The file path to your PKCS12 file. This will be the PKCS12 file for your server certificate.
 
