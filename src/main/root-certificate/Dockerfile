@@ -24,7 +24,7 @@ RUN chmod +x /usr/local/bin/confd
 COPY files/confd /etc/confd
 
 RUN apk update && \
-apk add --no-cache openssl=1.1.1a-r1 && \
+apk add --no-cache openssl=1.1.1b-r1 && \
 rm -rf /var/cache/apk/*
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
