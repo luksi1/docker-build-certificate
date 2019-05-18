@@ -21,6 +21,7 @@ env:
 
 before_install:
   - sudo apt-get update && sudo apt-get install -y openssl
+  - mkdir -p volumes/certificates
   - docker pull lukasmartinelli/hadolint
   - docker pull koalaman/shellcheck:stable
 
