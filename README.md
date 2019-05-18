@@ -120,7 +120,7 @@ Set the appropriate POM "properties" variables. Additionally note the use of the
 
 ### Root certificate options
 
-You can create a root certificate with following environment variables:
+You can create a root certificate with the following environment variables:
 
 ##### ROOT_SUBJECT
 This needs need to be specified in forward slash notation, ie: /C=US/ST=New York/L=New York/CN=Acme
